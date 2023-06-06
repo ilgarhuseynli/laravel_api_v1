@@ -13,6 +13,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+
+//        * * * * * php /var/www/html/ultrafix/artisan schedule:run >> /dev/null 2>&1
+//        * * * * * cd /var/www/html/ultrafix && php artisan schedule:run >> /dev/null 2>&1
     }
 
     /**
