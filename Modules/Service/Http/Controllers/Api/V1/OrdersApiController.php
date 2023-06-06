@@ -9,7 +9,7 @@ use App\Contact;
 use App\Http\Controllers\Controller;
 use App\Mail\NewOrderAdded;
 use App\Mail\NewOrderAttachedMail;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -177,7 +177,7 @@ class OrdersApiController extends Controller
             $order->users()->sync($request->input('users', []));
 
             //send mail to EMPLOYEES
-            $users = \App\User::whereIn('id', $request->input('users'))->get();
+            $users = \App\Models\User::whereIn('id', $request->input('users'))->get();
             $payment_percent = $users->first()->payment_percent;
             Mail::to($users)->send(new NewOrderAttachedMail($order));
         }
@@ -250,11 +250,11 @@ class OrdersApiController extends Controller
 
         //send mail to EMPLOYEES
         if ($syncUsers['attached']) {
-            $users = \App\User::whereIn('id', $syncUsers['attached'])->get();
+            $users = \App\Models\User::whereIn('id', $syncUsers['attached'])->get();
             Mail::to($users)->send(new NewOrderAttachedMail($order));
         }
         if ($syncUsers['detached']) {
-            $users = \App\User::whereIn('id', $syncUsers['detached'])->get();
+            $users = \App\Models\User::whereIn('id', $syncUsers['detached'])->get();
             Mail::to($users)->send(new NewOrderAttachedMail($order, 'detach'));
         }
 
