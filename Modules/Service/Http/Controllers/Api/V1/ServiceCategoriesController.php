@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Service\Http\Controllers;
+namespace Modules\Service\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\MediaUploadingTrait;
+use App\Traits\MediaUploadingTrait;
 use Modules\Service\Entities\ServiceCategory;
 use Modules\Service\Http\Requests\StoreServiceCategoryRequest;
 use Modules\Service\Http\Requests\UpdateServiceCategoryRequest;

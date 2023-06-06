@@ -20,28 +20,8 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => [
+                'string',
                 'required',
-            ],
-            'full_name' => [
-                'required',
-            ],
-            'address' => [
-                'max:255',
-                'nullable',
-            ],
-            'ssn' => [
-                'nullable',
-                'regex:/[0-9]{3}-[0-9]{2}-[0-9]{4}/',
-            ],
-            'phone' => [
-                'nullable',
-                'max:100',
-            ],
-            'payment_percent' => [
-                'nullable',
-                'numeric',
-                'max:100',
-                'min:0',
             ],
             'email' => [
                 'required',
@@ -53,9 +33,13 @@ class StoreUserRequest extends FormRequest
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
                 'confirmed'
             ],
-            'role_id' => [
-                'exists:roles,id',
+            'roles' => [
                 'required',
+                'array',
+            ],
+            'roles.*.id' => [
+                'integer',
+                'exists:roles,id',
             ],
         ];
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Frontend;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Service\ServiceInfoResource;
 use App\Http\Resources\Service\ServiceListResource;
+use Modules\Service\Entities\Service;
 
 class ServicesApiController extends Controller
 {

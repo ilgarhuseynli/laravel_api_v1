@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\User;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,44 +19,26 @@ class UpdateUserRequest extends FormRequest
     {
         $id = request()->route('user')->id ?? request()->route('user');
         $validationRules = [
-            'name'    => [
+            'name' => [
+                'string',
                 'required',
             ],
-            'full_name'    => [
-                'required',
-            ],
-            'address' => [
-                'max:255',
-                'nullable',
-            ],
-            'ssn' => [
-                'nullable',
-                'regex:/[0-9]{3}-[0-9]{2}-[0-9]{4}/',
-            ],
-            'phone' => [
-                'nullable',
-                'max:100',
-            ],
-            'payment_percent' => [
-                'nullable',
-                'numeric',
-                'max:100',
-                'min:0',
-            ],
-            'email'   => [
+            'email' => [
                 'required',
                 'unique:users,email,' . $id .',id,deleted_at,NULL',
             ],
-            'role_id' => [
-                'exists:roles,id',
+            'roles' => [
                 'required',
+                'array',
             ],
-            'deleted_at' => [
-                'boolean'
+            'roles.*.id' => [
+                'integer',
+                'exists:roles,id',
             ],
         ];
         if(request()->change_password == 1){
             $validationRules['password'] = [
+                'required',
                 'min:6',
                 'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
                 'confirmed'

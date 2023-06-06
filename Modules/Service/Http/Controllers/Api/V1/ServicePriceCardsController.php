@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Service\Http\Controllers;
+namespace Modules\Service\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Modules\Service\Http\Requests\StoreServicePriceCardRequest;

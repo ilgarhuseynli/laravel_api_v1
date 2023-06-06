@@ -8,12 +8,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
-use App\Models\Role;
+use App\Http\Resources\Admin\UserResource;
 use App\Models\User;
-use DateTime;
-use Gate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
@@ -22,9 +20,9 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::with('role')->withTrashed()->get();
+        $users = User::with(['roles'])->get();
 
-        return view('admin.users.index', compact('users'));
+        return Res::success(UserResource::collection($users));
     }
 
     public function minlist(Request $request)
@@ -42,22 +40,11 @@ class UsersController extends Controller
         }
 
         if (count($types) > 0){
-            $userQuery->whereIn('role_id',$types);
+            $userQuery->whereIn('roles',$types);
         }
 
         $users = $userQuery->skip($skip)->take($limit)->get();
         $usersCount = $userQuery->count();
-
-        $usersRes = [];
-        foreach ($users as $user){
-            $usersRes[] = [
-                'id' => $user->id,
-                'name' => $user->name,
-                'phone' => $user->phone,
-                'email' => $user->email,
-                'remote_tech' => $user->remote_tech,
-            ];
-        }
 
         return Res::custom([
             'status'=>'success',
@@ -68,108 +55,28 @@ class UsersController extends Controller
         ]);
     }
 
-    public function create()
-    {
-        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $roles = Role::all()->pluck('title', 'id');
-        $technicians = User::where('role_id',Role::ROLE_TECH)->pluck('name', 'id');
-
-        return view('admin.users.create', compact('roles', 'technicians'));
-    }
 
     public function store(StoreUserRequest $request)
     {
-        $validated = $request->all();
+        $user = User::create($request->validated());
+        $user->roles()->sync($request->input('roles.*.id', []));
 
-        $senior = array_key_exists("senior_technician", $validated);
-
-        if ($senior && array_key_exists("users_of_senior", $validated)){
-            $integerUserIds = [];
-            if (count((array)$validated['users_of_senior']) > 0){
-                $integerUserIds = array_map(function ($id){ return (int)$id; }, (array)$validated['users_of_senior']);
-            }
-            $validated['users_of_senior'] = $integerUserIds;
-        }else{
-            $validated['users_of_senior'] = null;
-        }
-
-        if ($senior){
-            $validated["senior_tech"] = (bool)$validated["senior_technician"];
-        }
-
-        if (!$validated["senior_tech"]){
-            $validated['users_of_senior'] = null;
-
-        }
-
-        User::create($validated);
-
-        return redirect()->route('admin.users.index');
-    }
-
-    public function edit(User $user)
-    {
-        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $roles = Role::all()->pluck('title', 'id');
-        $technicians = User::where('role_id',Role::ROLE_TECH)->pluck('name', 'id');
-
-        return view('admin.users.edit', compact('roles', 'user', 'technicians'));
-    }
-
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        if($request->change_password != 1){
-            $request->offsetUnset('password');
-        }
-
-        if ( $request->remote_tech == 1 && $request->role_id != Role::ROLE_TECH){
-            return back()->withErrors('Cant make "non technic" remote-tech');
-        }
-
-        $validated = $request->all();
-
-        if (!$request->deleted_at) {
-            $date = new DateTime();
-            $validated['deleted_at'] = $date->format('Y-m-d H:i:s');
-        }else{
-            $validated['deleted_at'] = null;
-        }
-
-        $senior = array_key_exists("senior_technician", $validated);
-
-        if ($senior && array_key_exists("users_of_senior", $validated)){
-            $integerUserIds = [];
-            if (count((array)$validated['users_of_senior']) > 0){
-                $integerUserIds = array_map(function ($id){ return (int)$id; }, (array)$validated['users_of_senior']);
-            }
-            $validated['users_of_senior'] = $integerUserIds;
-        }else{
-            $validated["users_of_senior"] = null;
-        }
-
-        if ($senior && (bool)$validated["senior_technician"]){
-            $validated["senior_tech"] = true;
-        }else{
-            $validated["senior_tech"] = false;
-            $validated['users_of_senior'] = null;
-        }
-
-        $user->update($validated);
-
-        return redirect()->route('admin.users.index');
+        return Res::success(['id' => $user->id],'Created successfully');
     }
 
     public function show(User $user)
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        if ($user->senior_tech && $user->users_of_senior && count($user->users_of_senior) > 0) {
-            $user->users_of_senior = User::withTrashed()->whereIn("id", $user->users_of_senior)->get();
-        }
+        return new UserResource($user->load(['roles']));
+    }
 
-        return view('admin.users.show', compact('user'));
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $user->update($request->validated());
+        $user->roles()->sync($request->input('roles.*.id', []));
+
+        return Res::success(['id' => $user->id],'Updated successfully');
     }
 
     public function destroy(User $user)
@@ -178,13 +85,14 @@ class UsersController extends Controller
 
         $user->delete();
 
-        return back();
+        return Res::success([], "Deleted", "Successfully deleted");
     }
+
 
     public function massDestroy(MassDestroyUserRequest $request)
     {
         User::whereIn('id', request('ids'))->delete();
 
-        return response(null, Response::HTTP_NO_CONTENT);
+        return Res::success([], "Deleted", "Successfully deleted");
     }
 }
