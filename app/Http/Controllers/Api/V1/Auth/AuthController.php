@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Classes\Res;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
@@ -60,7 +61,6 @@ class AuthController extends Controller
         $cookie = cookie()->forget('token');
 
         return Res::success([])->withCookie($cookie);
-
     }
 
     // get the authenticated user method
