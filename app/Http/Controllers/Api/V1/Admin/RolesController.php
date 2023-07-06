@@ -45,7 +45,7 @@ class RolesController extends Controller
 
         $role->load('permissions');
 
-        return new RoleResource($role);
+        return Res::success(new RoleResource($role));
     }
 
     public function destroy(Role $role)

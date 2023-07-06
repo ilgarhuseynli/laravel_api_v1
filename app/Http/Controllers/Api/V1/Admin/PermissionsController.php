@@ -43,7 +43,7 @@ class PermissionsController extends Controller
     {
         abort_if(Gate::denies('permission_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new PermissionResource($permission);
+        return Res::success(new PermissionResource($permission));
     }
 
     public function destroy(Permission $permission)

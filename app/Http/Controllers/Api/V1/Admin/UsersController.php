@@ -20,6 +20,7 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $username = $request->username;
         $name = $request->name;
         $role = $request->role;
 
@@ -28,13 +29,12 @@ class UsersController extends Controller
 
         $userQuery = User::with('role');
 
-        if (strlen($name) > 0){
+        if (strlen($name) > 0)
             $userQuery->where('name','like','%'.$name.'%');
-        }
-
-        if ($role){
+        if (strlen($username) > 0)
+            $userQuery->where('username','like','%'.$username.'%');
+        if ($role)
             $userQuery->where('role_id',$role);
-        }
 
         $usersCount = $userQuery->count();
         $users = $userQuery->skip($skip)->take($limit)->get();
@@ -85,7 +85,7 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new UserResource($user->load(['role']));
+        return Res::success(new UserResource($user->load(['role'])));
     }
 
     public function update(UpdateUserRequest $request, User $user)

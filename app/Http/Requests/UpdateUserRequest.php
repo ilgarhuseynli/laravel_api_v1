@@ -37,11 +37,11 @@ class UpdateUserRequest extends FormRequest
             ],
             'username' => [
                 'required',
-                'unique:users,username,NULL,id,deleted_at,NULL',
+                'unique:users,username,' . $id .',id,deleted_at,NULL',
             ],
             'email' => [
                 'required',
-                'unique:users,email,NULL,id,deleted_at,NULL',
+                'unique:users,email,' . $id .',id,deleted_at,NULL',
             ],
             'role_id' => [
                 'required',
