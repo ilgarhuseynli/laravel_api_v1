@@ -16,8 +16,13 @@ class User extends Authenticatable
     public $table = 'users';
 
     protected $fillable = [
+        "username",
+        "surname",
         'name',
         'email',
+        "phone",
+        "address",
+        "role_id",
         'password',
         'deleted_at',
     ];
@@ -35,9 +40,9 @@ class User extends Authenticatable
     ];
 
 
-    public function roles()
+    public function role()
     {
-        return $this->belongsToMany(Role::class);
+        return $this->belongsTo(Role::class,'role_id');
     }
 
 }

@@ -13,12 +13,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-//         \App\Models\User::factory(10)->create();
 
-         \App\Models\User::factory()->create([
-             'name' => 'admin2',
-             'email' => 'admin@admin.com',
-             'password' => Hash::make('password'),
-         ]);
+        $this->call([
+            PermissionsTableSeeder::class,
+            RolesTableSeeder::class,
+            PermissionRoleTableSeeder::class,
+            SettingsTableSeeder::class,
+        ]);
+
+
+        \App\Models\User::factory()->create([
+            'name' => 'Admin',
+            'surname' => 'Admin',
+            'username' => 'admin',
+            'role_id' => 1,
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('password'),
+        ]);
+
+        \App\Models\User::factory(20)->create();
+
+
+//        \Illuminate\Support\Facades\Artisan::call('module:seed Page');
+//        \Illuminate\Support\Facades\Artisan::call('module:seed Post');
+//        \Illuminate\Support\Facades\Artisan::call('module:seed Service');
+//        \Illuminate\Support\Facades\Artisan::call('module:seed Menu');
+
     }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Classes\Res;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -27,4 +29,11 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    protected function invalidJson($request, ValidationException $exception)
+    {
+//        $exception->errors()
+        return Res::error('Error',$exception->getMessage(),$exception->status);
+    }
+
 }

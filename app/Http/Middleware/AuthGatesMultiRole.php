@@ -8,32 +8,22 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 
-class AuthGates
+class AuthGatesMultiRole
 {
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
 
-
-//        $users = User::all();
-//        foreach ($users as $userdata){
-//            $roles = $userdata->roles[0];
-//
-//            $roleId = $roles->id;
-//
-//            $userdata->update(['role_id' => $roleId]);
-//        }
-//        dd($users);
-
         if (!app()->runningInConsole() && $user) {
-            $myRoleId = $user->role_id;
-            $key = 'auth_role_permissions_'.$myRoleId;
+            $myUserId = $user->id;
+            $key = 'auth_user_permissions_'.$myUserId;
+
 
             $rolePermissions = Cache::get($key);
             if(!$rolePermissions){
-                $rolePermissions = Role::where('id',$myRoleId)->with('permissions')->get();
+                $rolePermissions = Role::whereIn('id',$user->roles->pluck('id'))->with('permissions')->get();
                 Cache::forget($key);
-                Cache::add($key,$rolePermissions,now()->addHours(1));
+                Cache::add($key,$rolePermissions,now()->addMinutes(10));
             }
 
             $permissionsArray = [];
@@ -52,5 +42,4 @@ class AuthGates
 
         return $next($request);
     }
-
 }

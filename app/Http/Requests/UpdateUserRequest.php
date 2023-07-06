@@ -23,15 +23,28 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'surname' => [
+                'string',
+                'required',
+            ],
+            'phone' => [
+                'string',
+                'required',
+            ],
+            'address' => [
+                'string',
+                'required',
+            ],
+            'username' => [
+                'required',
+                'unique:users,username,NULL,id,deleted_at,NULL',
+            ],
             'email' => [
                 'required',
-                'unique:users,email,' . $id .',id,deleted_at,NULL',
+                'unique:users,email,NULL,id,deleted_at,NULL',
             ],
-            'roles' => [
+            'role_id' => [
                 'required',
-                'array',
-            ],
-            'roles.*.id' => [
                 'integer',
                 'exists:roles,id',
             ],
@@ -45,5 +58,6 @@ class UpdateUserRequest extends FormRequest
             ];
         }
         return  $validationRules;
+
     }
 }

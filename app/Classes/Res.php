@@ -4,7 +4,7 @@ namespace App\Classes;
 
 class Res
 {
-    public static function success($data = [],$title = 'Success',$description = ''){
+    public static function success($data = [],$description = 'Success',$title = 'Success'){
         return \response()->json([
             'status'=>'success',
             'data'=>$data,

@@ -23,6 +23,22 @@ class StoreUserRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'surname' => [
+                'string',
+                'required',
+            ],
+            'phone' => [
+                'string',
+                'required',
+            ],
+            'address' => [
+                'string',
+                'required',
+            ],
+            'username' => [
+                'required',
+                'unique:users,username,NULL,id,deleted_at,NULL',
+            ],
             'email' => [
                 'required',
                 'unique:users,email,NULL,id,deleted_at,NULL',
@@ -30,14 +46,11 @@ class StoreUserRequest extends FormRequest
             'password' => [
                 'required',
                 'min:6',
-                'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+//                'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
                 'confirmed'
             ],
-            'roles' => [
+            'role_id' => [
                 'required',
-                'array',
-            ],
-            'roles.*.id' => [
                 'integer',
                 'exists:roles,id',
             ],

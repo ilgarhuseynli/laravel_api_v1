@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\PermissionsController;
+use App\Http\Controllers\Api\V1\Admin\RolesController;
 use App\Http\Controllers\Api\V1\Admin\UsersController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Frontend\ServicesApiController;
@@ -18,16 +20,19 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
     Route::group(['middleware' => ['auth:sanctum', 'auth.gates']], function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/user', [AuthController::class, 'user']);
+        Route::get('/settings', [AuthController::class, 'settings']);
 
 
         Route::delete('users/destroy', [UsersController::class,'massDestroy'])->name('users.massDestroy');
         Route::get('users/minlist', [UsersController::class,'minlist'])->name('users.minlist');
         Route::apiResource('users', UsersController::class);
 
+
+        Route::apiResource('roles', RolesController::class);
+
+        Route::apiResource('permissions',  PermissionsController::class);
+
     });
-
-
-
 
 });
 

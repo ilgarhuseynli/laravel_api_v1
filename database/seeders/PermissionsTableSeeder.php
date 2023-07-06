@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
 
@@ -164,55 +166,55 @@ class PermissionsTableSeeder extends Seeder
                 'title'      => 'order_show',
             ],
             [
-                'id'         => '98',
+                'id'         => '109',
                 'title'      => 'order_admin',
             ],
 
 
-//            [
-//                'id'         => '98',
-//                'title'      => 'service_managment_access',
-//            ],
-//            [
-//                'id'         => '99',
-//                'title'      => 'service_category_delete',
-//            ],
-//            [
-//                'id'         => '100',
-//                'title'      => 'service_category_access',
-//            ],
-//            [
-//                'id'         => '101',
-//                'title'      => 'service_category_create',
-//            ],
-//            [
-//                'id'         => '102',
-//                'title'      => 'service_category_edit',
-//            ],
-//            [
-//                'id'         => '103',
-//                'title'      => 'service_category_show',
-//            ],
-//            [
-//                'id'         => '104',
-//                'title'      => 'service_price_card_delete',
-//            ],
-//            [
-//                'id'         => '105',
-//                'title'      => 'service_price_card_access',
-//            ],
-//            [
-//                'id'         => '106',
-//                'title'      => 'service_price_card_create',
-//            ],
-//            [
-//                'id'         => '107',
-//                'title'      => 'service_price_card_edit',
-//            ],
-//            [
-//                'id'         => '108',
-//                'title'      => 'service_price_card_show',
-//            ],
+            [
+                'id'         => '98',
+                'title'      => 'service_managment_access',
+            ],
+            [
+                'id'         => '99',
+                'title'      => 'service_category_delete',
+            ],
+            [
+                'id'         => '100',
+                'title'      => 'service_category_access',
+            ],
+            [
+                'id'         => '101',
+                'title'      => 'service_category_create',
+            ],
+            [
+                'id'         => '102',
+                'title'      => 'service_category_edit',
+            ],
+            [
+                'id'         => '103',
+                'title'      => 'service_category_show',
+            ],
+            [
+                'id'         => '104',
+                'title'      => 'service_price_card_delete',
+            ],
+            [
+                'id'         => '105',
+                'title'      => 'service_price_card_access',
+            ],
+            [
+                'id'         => '106',
+                'title'      => 'service_price_card_create',
+            ],
+            [
+                'id'         => '107',
+                'title'      => 'service_price_card_edit',
+            ],
+            [
+                'id'         => '108',
+                'title'      => 'service_price_card_show',
+            ],
         ];
 
         Permission::insert($permissions);

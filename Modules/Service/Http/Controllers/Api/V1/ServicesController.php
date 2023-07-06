@@ -5,7 +5,6 @@ namespace Modules\Service\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Traits\MediaUploadingTrait;
 use Illuminate\Support\Facades\Gate;
-use Modules\Service\Entities\ServiceCategory;
 use Modules\Service\Entities\ServicePrice;
 use Modules\Service\Http\Requests\MassDestroyServiceRequest;
 use Modules\Service\Http\Requests\StoreServiceRequest;

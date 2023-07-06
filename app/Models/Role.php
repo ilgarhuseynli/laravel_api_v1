@@ -30,12 +30,6 @@ class Role extends Model
     const ROLE_MODERATOR = 2;
     const ROLE_TECH = 3;
 
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class);
-    }
-
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
