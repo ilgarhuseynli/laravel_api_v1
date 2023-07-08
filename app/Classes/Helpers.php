@@ -237,6 +237,28 @@ class Helpers
     }
 
 
+    public static function manageSortRequest($sortField, $sortType, $fields = false, $defaultParams = [])
+    {
+        $defaultSortField = @$defaultParams['sort_field'] ?: 'created_at';
+        $defaultSortType = @$defaultParams['sort_type'] ?: 'desc';
+        $sortType = $sortType ?: $defaultSortType;
+
+        $fields = is_array($fields) ? $fields : ['_id', 'created_at', 'title'];
+
+        $sort_field = trim(strtolower($sortField));
+
+        if (@$fields[$sort_field]){
+            $sort_field = $fields[$sort_field];
+        }elseif(!in_array($sort_field, $fields)){
+            $sort_field = $defaultSortField;
+        }
+
+        $sortType = $sortType == 'asc' ? 'asc' : 'desc';
+
+        return [$sort_field,$sortType];
+    }
+
+
     public static function safe_b64encode($string) {
         $data = base64_encode($string);
         return str_replace(array('+','/','='),array('-','_',''),$data);

@@ -26,6 +26,7 @@ class UsersController extends Controller
 
         $skip = (int)$request->skip;
         $limit = Helpers::manageLimitRequest($request->limit);
+        $sort = Helpers::manageSortRequest($request->sort,$request->sort_type,User::$sortable);
 
         $userQuery = User::with('role');
 
@@ -37,7 +38,7 @@ class UsersController extends Controller
             $userQuery->where('role_id',$role);
 
         $usersCount = $userQuery->count();
-        $users = $userQuery->skip($skip)->take($limit)->get();
+        $users = $userQuery->orderBy($sort[0],$sort[1])->skip($skip)->take($limit)->get();
 
         return Res::custom([
             'status'=>'success',

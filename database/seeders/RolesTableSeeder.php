@@ -11,15 +11,15 @@ class RolesTableSeeder extends Seeder
         $roles = [
             [
                 'id'    => 1,
-                'title' => 'Admin',
-            ],
-            [
-                'id'    => 2,
                 'title' => 'Moderator',
             ],
             [
+                'id'    => 2,
+                'title' => 'Employee',
+            ],
+            [
                 'id'    => 3,
-                'title' => 'Technician',
+                'title' => 'User',
             ],
         ];
 

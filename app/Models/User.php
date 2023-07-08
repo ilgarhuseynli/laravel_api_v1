@@ -27,6 +27,15 @@ class User extends Authenticatable
         'deleted_at',
     ];
 
+    public static $sortable = [
+        "id",
+        "username",
+        "surname",
+        'name',
+        'email',
+        'created_at',
+    ];
+
 
     protected $hidden = [
         'password',
@@ -39,6 +48,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    const ROLE_MODERATOR = 1;
+    const ROLE_EMPLOYEE = 2;
+    const ROLE_USER = 3;
 
     public function role()
     {
