@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Classes\Permission;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,7 +11,7 @@ class UpdateUserRequest extends FormRequest
 {
     public function authorize()
     {
-        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('user_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return true;
     }
@@ -46,7 +47,6 @@ class UpdateUserRequest extends FormRequest
             'role_id' => [
                 'required',
                 'integer',
-                'exists:roles,id',
             ],
         ];
         if(request()->change_password == 1){

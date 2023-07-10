@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Classes\Permission;
 use App\Classes\Res;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\Admin\UserResource;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -75,13 +76,11 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        $rolePermissions = Role::where('id',$user->role_id)->with('permissions')->get();
+        $userPerms = $user->getPermissions();
 
         $permissionsArray = [];
-        foreach ($rolePermissions as $role) {
-            foreach ($role->permissions as $permissions) {
-                $permissionsArray[$permissions->title] = $permissions->id;
-            }
+        foreach ($userPerms as $key => $val) {
+            $permissionsArray[$key] = $val['allow'];
         }
 
         return Res::success([
@@ -90,25 +89,4 @@ class AuthController extends Controller
         ]);
     }
 
-
-    //multi role settings
-    // get the authenticated user method
-//    public function settings(Request $request) {
-//
-//        $user = Auth::user();
-//
-//        $rolePermissions = Role::whereIn('id',$user->roles->pluck('id'))->with('permissions')->get();
-//
-//        $permissionsArray = [];
-//        foreach ($rolePermissions as $role) {
-//            foreach ($role->permissions as $permissions) {
-//                $permissionsArray[$permissions->title] = $permissions->id;
-//            }
-//        }
-//
-//        return Res::success([
-//            'account_data' => new UserResource($user),
-//            'permissions' => $permissionsArray,
-//        ]);
-//    }
 }

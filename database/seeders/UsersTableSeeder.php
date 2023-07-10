@@ -13,6 +13,7 @@ class UsersTableSeeder extends Seeder
             [
                 'id'             => 1,
                 'name'           => 'Admin',
+                'role_id'        => User::ROLE_MODERATOR,
                 'email'          => 'admin@admin.com',
                 'password'       => Hash::make('password'), //bcrypt('password'),
                 'remember_token' => null,

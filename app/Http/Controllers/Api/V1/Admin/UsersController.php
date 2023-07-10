@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Classes\Helpers;
+use App\Classes\Permission;
 use App\Classes\Res;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyUserRequest;
@@ -11,14 +12,13 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\Admin\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
     public function index(Request $request)
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('user_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $username = $request->username;
         $name = $request->name;
@@ -28,7 +28,7 @@ class UsersController extends Controller
         $limit = Helpers::manageLimitRequest($request->limit);
         $sort = Helpers::manageSortRequest($request->sort,$request->sort_type,User::$sortable);
 
-        $userQuery = User::with('role');
+        $userQuery = User::query();
 
         if (strlen($name) > 0)
             $userQuery->where('name','like','%'.$name.'%');
@@ -84,9 +84,9 @@ class UsersController extends Controller
 
     public function show(User $user)
     {
-        abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('user_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return Res::success(new UserResource($user->load(['role'])));
+        return Res::success(new UserResource($user));
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -98,7 +98,7 @@ class UsersController extends Controller
 
     public function destroy(User $user)
     {
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $user->delete();
 

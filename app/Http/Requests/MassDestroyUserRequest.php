@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Classes\Permission;
 use App\Models\User;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
@@ -11,7 +12,7 @@ class MassDestroyUserRequest extends FormRequest
 {
     public function authorize()
     {
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return true;
     }

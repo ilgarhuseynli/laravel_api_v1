@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\ParametersController;
 use App\Http\Controllers\Api\V1\Admin\PermissionsController;
-use App\Http\Controllers\Api\V1\Admin\RolesController;
 use App\Http\Controllers\Api\V1\Admin\UsersController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Frontend\ServicesApiController;
@@ -17,7 +17,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
     Route::get('/services/list', [ServicesApiController::class, 'list'])->name('service.list');
 
 
-    Route::group(['middleware' => ['auth:sanctum', 'auth.gates']], function () {
+    Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/user', [AuthController::class, 'user']);
         Route::get('/settings', [AuthController::class, 'settings']);
@@ -28,9 +28,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         Route::apiResource('users', UsersController::class);
 
 
-        Route::apiResource('roles', RolesController::class);
+        Route::get('parameters',  [ParametersController::class,'index'])->name('parameters.list');;
 
-        Route::apiResource('permissions',  PermissionsController::class);
+        Route::get('permissions',  [PermissionsController::class,'index']);
+        Route::put('permissions',  [PermissionsController::class,'update']);
 
     });
 

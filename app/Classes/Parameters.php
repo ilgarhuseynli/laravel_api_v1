@@ -8,7 +8,10 @@ class Parameters
 
     public static function get($key, $keyName = false)
     {
-        $data = call_user_func("self::" . "" . $key);
+        $data = [];
+        if (in_array($key,get_class_methods(self::class))){
+            $data = call_user_func("self::" . "" . $key);
+        }
         $result = [];
         foreach ($data as $value) {
             $r = [];

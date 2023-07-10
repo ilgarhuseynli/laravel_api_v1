@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
+use App\Classes\Permission;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MassDestroySettingRequest;
 use App\Http\Requests\StoreSettingRequest;
 use App\Http\Requests\UpdateSettingRequest;
 use App\Models\Setting;
-use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class SettingsController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('setting_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('setting_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $settings = Setting::orderBy('id','asc')->get();
 
@@ -24,7 +22,7 @@ class SettingsController extends Controller
 
     public function create()
     {
-        abort_if(Gate::denies('setting_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('setting_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('admin.settings.create');
     }
@@ -38,7 +36,7 @@ class SettingsController extends Controller
 
     public function edit(Setting $setting)
     {
-        abort_if(Gate::denies('setting_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('setting_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('admin.settings.edit', compact('setting'));
     }
@@ -52,14 +50,14 @@ class SettingsController extends Controller
 
     public function show(Setting $setting)
     {
-        abort_if(Gate::denies('setting_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('setting_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('admin.settings.show', compact('setting'));
     }
 
     public function destroy(Setting $setting)
     {
-        abort_if(Gate::denies('setting_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('setting_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $setting->delete();
 

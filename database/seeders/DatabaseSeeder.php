@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,9 +15,6 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-            PermissionsTableSeeder::class,
-            RolesTableSeeder::class,
-            PermissionRoleTableSeeder::class,
             SettingsTableSeeder::class,
         ]);
 
@@ -26,7 +23,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'surname' => 'Admin',
             'username' => 'admin',
-            'role_id' => 1,
+            'role_id' => User::ROLE_MODERATOR,
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),
         ]);

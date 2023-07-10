@@ -2,56 +2,56 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
+use App\Classes\Permission;
 use App\Classes\Res;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MassDestroyPermissionRequest;
-use App\Http\Requests\StorePermissionRequest;
-use App\Http\Requests\UpdatePermissionRequest;
-use App\Http\Resources\Admin\PermissionResource;
-use App\Http\Resources\Admin\RoleResource;
-use App\Models\Permission;
-use Gate;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class PermissionsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        abort_if(Gate::denies('permission_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('permission_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $permissions = Permission::all();
+        $userId = $request->user_id;
+        $canViewAll = Permission::check('permission_view','all');
 
-        return Res::success(PermissionResource::collection($permissions));
+        if (!$userId && !$canViewAll){
+            $userId = Auth::id();
+        }
+
+        if ($userId != Auth::id() && !$canViewAll){
+            Res::error('PermissionNotAllowed','PermissionNotAllowed');
+        }
+
+        //if perm view all then can see all users perms.
+        $userData = User::find($userId);
+
+        if (!$userData){
+            Res::error('DataNotFound','DataNotFound');
+        }
+
+        $permList = $userData->getPermissions();
+
+        if ($request->formated){
+            $permList = Permission::formatList($permList);
+        }
+
+        return Res::success($permList);
     }
 
-    public function store(StorePermissionRequest $request)
-    {
-        $permission = Permission::create($request->all());
 
-        return Res::success(['id' => $permission->id],'Created successfully');
+    public function update()
+    {
+        abort_if(Gate::denies('permission_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        //if perm update all then can see all users perms.
+
+
     }
 
-    public function update(UpdatePermissionRequest $request, Permission $permission)
-    {
-        $permission->update($request->all());
-
-        return Res::success(['id' => $permission->id],'Updated successfully');
-    }
-
-    public function show(Permission $permission)
-    {
-        abort_if(Gate::denies('permission_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return Res::success(new PermissionResource($permission));
-    }
-
-    public function destroy(Permission $permission)
-    {
-        abort_if(Gate::denies('permission_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $permission->delete();
-
-        return Res::success([], "Deleted", "Successfully deleted");
-    }
 }

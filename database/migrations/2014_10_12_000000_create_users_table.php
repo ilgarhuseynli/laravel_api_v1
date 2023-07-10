@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('surname');
 
-            $table->unsignedInteger('role_id')->nullable();
-            $table->foreign('role_id', 'role_id_fk_915742')->references('id')->on('roles')->onDelete('RESTRICT');
+            $table->tinyInteger('role_id')->nullable();
+            $table->json('permissions')->nullable();
 
             $table->string('email')->unique();
             $table->string('phone')->nullable();

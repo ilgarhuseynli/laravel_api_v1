@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Classes\Permission;
 use App\Post;
 use Gate;
 use Illuminate\Foundation\Http\FormRequest;
@@ -11,7 +12,7 @@ class MassDestroySettingRequest extends FormRequest
 {
     public function authorize()
     {
-        abort_if(Gate::denies('setting_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('setting_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return true;
     }
