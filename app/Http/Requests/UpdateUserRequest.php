@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Classes\Permission;
-use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,7 +18,7 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         $id = request()->route('user')->id ?? request()->route('user');
-        $validationRules = [
+        return [
             'name' => [
                 'string',
                 'required',
@@ -49,15 +48,5 @@ class UpdateUserRequest extends FormRequest
                 'integer',
             ],
         ];
-        if(request()->change_password == 1){
-            $validationRules['password'] = [
-                'required',
-                'min:6',
-                'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
-                'confirmed'
-            ];
-        }
-        return  $validationRules;
-
     }
 }

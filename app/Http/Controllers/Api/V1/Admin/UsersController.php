@@ -96,6 +96,25 @@ class UsersController extends Controller
         return Res::success(['id' => $user->id],'Updated successfully');
     }
 
+
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'password' => [
+                'required',
+                'min:6',
+                'regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+                'confirmed'
+            ],
+        ]);
+
+        $userData = User::findOrFail($request->id);
+
+        $userData->update($validated);
+
+        return Res::success(['id' => $userData->id],'Updated successfully');
+    }
+
     public function destroy(User $user)
     {
         abort_if(!Permission::check('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');

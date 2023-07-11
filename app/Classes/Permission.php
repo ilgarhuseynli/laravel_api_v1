@@ -7,22 +7,9 @@ use Illuminate\Support\Facades\Auth;
 class Permission
 {
 
-
     public static function permissionsList($allowedPerms = false){
 
         $list = [
-            "permission_view" => [
-                "value" => "permissions_view",
-                "title" => "View",
-                "group" => 'permission',
-                "service" => 'general',
-            ],
-            "permission_update" => [
-                "value" => "permissions_update",
-                "title" => "Update",
-                "group" => 'permission',
-                "service" => 'general',
-            ],
 
             "user_view" => [
                 "value" => "user_view",
@@ -48,6 +35,20 @@ class Permission
                 "group" => 'user',
                 "service" => 'general',
             ],
+
+            "permission_view" => [
+                "value" => "permission_view",
+                "title" => "View",
+                "group" => 'permission',
+                "service" => 'general',
+            ],
+            "permission_update" => [
+                "value" => "permission_update",
+                "title" => "Update",
+                "group" => 'permission',
+                "service" => 'general',
+            ],
+
 
             "order_view" => [
                 "value" => "order_view",
@@ -199,11 +200,10 @@ class Permission
                 $data[$value['service']]['groups'][$value['group']] = $groupData;
             }
 
-
             $currentVal = [
-                'title' => $value['title'],
-                'value' => $value['value'],
-                'allow' => $value['allow'],
+                'title'  => $value['title'],
+                'value'  => $value['value'],
+                'allow'  => $value['allow'],
                 'locked' => $value['locked'] ? : false,
             ];
 
