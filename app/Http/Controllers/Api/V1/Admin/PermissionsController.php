@@ -17,21 +17,16 @@ class PermissionsController extends Controller
         abort_if(!Permission::check('permission_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $userId = $request->user_id;
-        $canViewAll = Permission::check('permission_view', 'all');
 
-        if (!$userId && !$canViewAll) {
-            $userId = Auth::id();
-        }
-
-        if ($userId != Auth::id() && !$canViewAll) {
-           return Res::error('PermissionNotAllowed', 'PermissionNotAllowed');
+        if (!$userId) {
+            return Res::error('DataNotFound');
         }
 
         //if perm view all then can see all users perms.
         $userData = User::findOrFail($userId);
 
         if (!$userData) {
-           return Res::error('DataNotFound', 'DataNotFound');
+           return Res::error('DataNotFound');
         }
 
         $permList = $userData->getPermissions();
@@ -49,19 +44,15 @@ class PermissionsController extends Controller
         abort_if(!Permission::check('permission_update'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $userId = $request->user_id;
-        $canViewAll = Permission::check('permission_view', 'all');
 
-        if (!$canViewAll) {
-           return Res::error('PermissionNotAllowed', 'PermissionNotAllowed');
-        }
         if ($userId == Auth::id()) {
-            return Res::error('CantUpdateSelf', 'CantUpdateSelf');
+            return Res::error('CantUpdateSelf');
         }
 
         $userData = User::findOrFail($userId);
 
         if (!$userData) {
-           return Res::error('DataNotFound', 'DataNotFound');
+           return Res::error('DataNotFound');
         }
 
         $defaultUserPermList = Permission::getByRole($userData->role_id);
@@ -69,7 +60,7 @@ class PermissionsController extends Controller
         $permExist = $defaultUserPermList[$request->value];
 
         if (!$permExist) {
-           return Res::error('PermissionNotExists', 'PermissionNotExists');
+           return Res::error('PermissionNotExists');
         }
 
         $resData = $permExist;
@@ -91,6 +82,7 @@ class PermissionsController extends Controller
             'locked' =>$resData['locked'],
             'title' =>$resData['title'],
             'value' =>$resData['value'],
+            'variants' =>$resData['variants'],
         ];
 
         return Res::success($resData, 'Updated successfully');

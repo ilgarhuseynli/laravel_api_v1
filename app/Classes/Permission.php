@@ -7,9 +7,83 @@ use Illuminate\Support\Facades\Auth;
 class Permission
 {
 
+    public static function getServices($key = false){
+
+        $list = [
+            'general' => ['title' => 'General','value' => 'general'],
+            'order_management' => ['title' => 'Order Management','value' => 'order_management'],
+        ];
+
+        return $key ? $list[$key] : $list;
+    }
+
+    public static function getGroups($key = false){
+
+        $list = [
+            'moderator' => ['title' => 'Moderator','value' => 'moderator'],
+            'employee' => ['title' => 'Employee','value' => 'employee'],
+            'user' => ['title' => 'Users','value' => 'user'],
+            'permission' => ['title' => 'Permissions','value' => 'permission'],
+            'order' => ['title' => 'Order','value' => 'order'],
+        ];
+
+        return $key ? $list[$key] : $list;
+    }
+
+
     public static function permissionsList($allowedPerms = false){
 
         $list = [
+
+            "moderator_view" => [
+                "value" => "moderator_view",
+                "title" => "View",
+                "group" => 'moderator',
+                "service" => 'general',
+            ],
+            "moderator_create" => [
+                "value" => "moderator_create",
+                "title" => "Create",
+                "group" => 'moderator',
+                "service" => 'general',
+            ],
+            "moderator_update" => [
+                "value" => "moderator_update",
+                "title" => "Update",
+                "group" => 'moderator',
+                "service" => 'general',
+            ],
+            "moderator_delete" => [
+                "value" => "moderator_delete",
+                "title" => "Delete",
+                "group" => 'moderator',
+                "service" => 'general',
+            ],
+
+            "employee_view" => [
+                "value" => "employee_view",
+                "title" => "View",
+                "group" => 'employee',
+                "service" => 'general',
+            ],
+            "employee_create" => [
+                "value" => "employee_create",
+                "title" => "Create",
+                "group" => 'employee',
+                "service" => 'general',
+            ],
+            "employee_update" => [
+                "value" => "employee_update",
+                "title" => "Update",
+                "group" => 'employee',
+                "service" => 'general',
+            ],
+            "employee_delete" => [
+                "value" => "employee_delete",
+                "title" => "Delete",
+                "group" => 'employee',
+                "service" => 'general',
+            ],
 
             "user_view" => [
                 "value" => "user_view",
@@ -36,6 +110,7 @@ class Permission
                 "service" => 'general',
             ],
 
+
             "permission_view" => [
                 "value" => "permission_view",
                 "title" => "View",
@@ -55,24 +130,28 @@ class Permission
                 "title" => "View",
                 "group" => 'order',
                 "service" => 'order_management',
+                "variants" => ['self','all'],
             ],
             "order_create" => [
                 "value" => "order_create",
                 "title" => "Create",
                 "group" => 'order',
                 "service" => 'order_management',
+                "variants" => ['self','all'],
             ],
             "order_update" => [
                 "value" => "order_update",
                 "title" => "Update",
                 "group" => 'order',
                 "service" => 'order_management',
+                "variants" => ['self','all'],
             ],
             "order_delete" => [
                 "value" => "order_delete",
                 "title" => "Delete",
                 "group" => 'order',
                 "service" => 'order_management',
+                "variants" => ['self','all'],
             ],
 
         ];
@@ -81,9 +160,8 @@ class Permission
         if ($allowedPerms){
             $res = [];
             foreach (self::permissionsList() as $key => $value){
-                $selectedPerm = $allowedPerms[$key];
-                if ($selectedPerm){
-                    $value['allow'] = $selectedPerm;
+                if (array_key_exists($key,$allowedPerms)){
+                    $value['allow'] = $allowedPerms[$key];
                     $res[$key] = $value;
                 }
             }
@@ -95,38 +173,29 @@ class Permission
     }
 
 
-    public static function getServices($key = false){
-
-        $list = [
-            'general' => ['title' => 'General','value' => 'general'],
-            'order_management' => ['title' => 'Order Management','value' => 'order_management'],
-        ];
-
-        return $key ? $list[$key] : $list;
-    }
-
-    public static function getGroups($key = false){
-
-        $list = [
-            'permission' => ['title' => 'Permissions','value' => 'permission'],
-            'user' => ['title' => 'Users','value' => 'user'],
-            'order' => ['title' => 'Order','value' => 'order'],
-        ];
-
-        return $key ? $list[$key] : $list;
-    }
-
 
 
     public static function getModeratorList() {
 
         $allowedPerms = [
-            'permission_view' => 'all',
-            'permission_update' => 'all',
-            'user_view' => 'all',
-            'user_create' => 'all',
-            'user_update' => 'all',
-            'user_delete' => 'all',
+            'moderator_view' => true,
+            'moderator_create' => true,
+            'moderator_update' => true,
+            'moderator_delete' => true,
+
+            'employee_view' => true,
+            'employee_create' => true,
+            'employee_update' => true,
+            'employee_delete' => true,
+
+            'user_view' => true,
+            'user_create' => true,
+            'user_update' => true,
+            'user_delete' => true,
+
+            'permission_view' => true,
+            'permission_update' => true,
+
             'order_view' => 'all',
             'order_create' => 'all',
             'order_update' => 'all',
@@ -140,10 +209,6 @@ class Permission
     public static function getEmployeeList() {
 
         $allowedPerms = [
-            'user_view' => 'self',
-            'user_create' => 'self',
-            'user_update' => 'self',
-            'user_delete' => 'self',
             'order_view' => 'all',
             'order_create' => 'all',
             'order_update' => 'all',
@@ -205,6 +270,7 @@ class Permission
                 'value'  => $value['value'],
                 'allow'  => $value['allow'],
                 'locked' => $value['locked'] ? : false,
+                'variants' => $value['variants'] ? : false,
             ];
 
             $data[$value['service']]['groups'][$value['group']]['permissions'][$key] = $currentVal;
@@ -227,7 +293,7 @@ class Permission
         }
 
         if ($type){
-            return $allow == $type;
+            return $allow === $type;
         }
 
         return (bool)$allow;

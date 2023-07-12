@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -72,5 +73,23 @@ class User extends Authenticatable
 
         return $permListByKey;
     }
+
+
+    public static function checkPermission($role,$permission = 'view')
+    {
+        $permissions = Auth::user()->getPermissions();
+
+        $allow = false;
+        if ($role == User::ROLE_MODERATOR && $permissions['moderator_'.$permission]['allow']) {
+            $allow = true;
+        } elseif ($role == User::ROLE_EMPLOYEE && $permissions['employee_'.$permission]['allow']) {
+            $allow = true;
+        } elseif ($role == User::ROLE_USER && $permissions['user_'.$permission]['allow']) {
+            $allow = true;
+        }
+
+        return $allow;
+    }
+
 
 }

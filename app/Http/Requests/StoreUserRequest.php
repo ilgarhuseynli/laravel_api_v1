@@ -2,15 +2,15 @@
 
 namespace App\Http\Requests;
 
-use App\Classes\Permission;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
-use Symfony\Component\HttpFoundation\Response;
 
 class StoreUserRequest extends FormRequest
 {
     public function authorize()
     {
-        abort_if(!Permission::check('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (!User::checkPermission(request()->role_id,'create'))
+            return false;
 
         return true;
     }
@@ -27,12 +27,12 @@ class StoreUserRequest extends FormRequest
                 'required',
             ],
             'phone' => [
+                'nullable',
                 'string',
-                'required',
             ],
             'address' => [
+                'nullable',
                 'string',
-                'required',
             ],
             'username' => [
                 'required',

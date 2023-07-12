@@ -51,7 +51,7 @@ class AuthController extends Controller
             return Res::success(['token' => $token, 'user' => $_user])->withCookie($cookie);
 
         } else {
-            return Res::error('Error','Invalid credentials',422);
+            return Res::error('Invalid credentials');
         }
     }
 

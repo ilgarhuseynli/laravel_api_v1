@@ -13,7 +13,7 @@ class Res
         ]);
     }
 
-    public static function error($title = 'Error',$description = '',$errorCode = 422){
+    public static function error($description = '',$title = 'Error',$errorCode = 422){
         return \response()->json([
             'status'=>'error',
             'title'=>$title,

@@ -3,23 +3,18 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Classes\Helpers;
-use App\Classes\Permission;
 use App\Classes\Res;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\Admin\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
     public function index(Request $request)
     {
-        abort_if(!Permission::check('user_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         $username = $request->username;
         $name = $request->name;
         $role = $request->role;
@@ -28,8 +23,10 @@ class UsersController extends Controller
         $limit = Helpers::manageLimitRequest($request->limit);
         $sort = Helpers::manageSortRequest($request->sort,$request->sort_type,User::$sortable);
 
-        $userQuery = User::query();
+        if (!User::checkPermission($role))
+            return Res::error('Permission not allowed');
 
+        $userQuery = User::query();
         if (strlen($name) > 0)
             $userQuery->where('name','like','%'.$name.'%');
         if (strlen($username) > 0)
@@ -52,15 +49,20 @@ class UsersController extends Controller
     public function minlist(Request $request)
     {
         $name = $request->name;
+        $role = $request->role;
+        $username = $request->username;
 
         $skip = (int)$request->skip;
         $limit = Helpers::manageLimitRequest($request->limit);
 
         $userQuery = User::query();
 
-        if (strlen($name) > 0){
+        if (strlen($name) > 0)
             $userQuery->where('name','like','%'.$name.'%');
-        }
+        if (strlen($username) > 0)
+            $userQuery->where('username','like','%'.$username.'%');
+        if ($role)
+            $userQuery->where('role_id',$role);
 
         $users = $userQuery->skip($skip)->take($limit)->get();
         $usersCount = $userQuery->count();
@@ -84,7 +86,8 @@ class UsersController extends Controller
 
     public function show(User $user)
     {
-        abort_if(!Permission::check('user_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (!User::checkPermission($user->role_id,'create'))
+            return Res::error('Permission not allowed');
 
         return Res::success(new UserResource($user));
     }
@@ -99,6 +102,16 @@ class UsersController extends Controller
 
     public function updatePassword(Request $request)
     {
+        $userId = $request->id;
+
+        if (!$userId)
+            return Res::error('User not found');
+
+        $userData = User::findOrFail($request->id);
+
+        if (!User::checkPermission($userData->role_id,'update'))
+            return Res::error('Permission not allowed');
+
         $validated = $request->validate([
             'password' => [
                 'required',
@@ -108,8 +121,6 @@ class UsersController extends Controller
             ],
         ]);
 
-        $userData = User::findOrFail($request->id);
-
         $userData->update($validated);
 
         return Res::success(['id' => $userData->id],'Updated successfully');
@@ -117,17 +128,10 @@ class UsersController extends Controller
 
     public function destroy(User $user)
     {
-        abort_if(!Permission::check('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if (!User::checkPermission($user->role_id,'delete'))
+            return Res::error('Permission not allowed');
 
         $user->delete();
-
-        return Res::success([], "Deleted", "Successfully deleted");
-    }
-
-
-    public function massDestroy(MassDestroyUserRequest $request)
-    {
-        User::whereIn('id', request('ids'))->delete();
 
         return Res::success([], "Deleted", "Successfully deleted");
     }

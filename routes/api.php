@@ -23,7 +23,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         Route::get('/settings', [AuthController::class, 'settings']);
 
 
-        Route::delete('users/destroy', [UsersController::class,'massDestroy'])->name('users.massDestroy');
+//        Route::delete('users/destroy', [UsersController::class,'massDestroy'])->name('users.massDestroy');
         Route::get('users/minlist', [UsersController::class,'minlist'])->name('users.minlist');
         Route::put('users/password/edit', [UsersController::class,'updatePassword']);
         Route::apiResource('users', UsersController::class);
