@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Classes\Permission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,10 +9,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
-    use SoftDeletes, HasApiTokens, HasFactory, Notifiable;
+    use SoftDeletes, HasApiTokens, HasFactory, Notifiable,InteractsWithMedia;
 
     public $table = 'users';
 
@@ -28,6 +30,10 @@ class User extends Authenticatable
         "permissions",
         'password',
         'deleted_at',
+    ];
+
+    protected $appends = [
+        'avatar',
     ];
 
     public static $sortable = [
@@ -91,5 +97,55 @@ class User extends Authenticatable
         return $allow;
     }
 
+
+    public function getAvatarAttribute()
+    {
+        $file = $this->getMedia('avatar')->last();
+
+        if ($file) {
+            $file->url = $file->getUrl();
+            $file->thumbnail = $file->getUrl('thumb');
+            $file->medium = $file->getUrl('medium');
+            $file->large = $file->getUrl('large');
+        }
+        return $file;
+    }
+
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+//        $this
+//            ->addMediaConversion('preview')
+//            ->fit(Manipulations::FIT_CROP, 300, 300)
+//            ->nonQueued();
+
+        $this->addMediaConversion('thumb')->width(150)->height(150)->performOnCollections('avatar');
+
+        $this->addMediaConversion('medium')->width(600)->height(600)->performOnCollections('avatar');
+
+        $this->addMediaConversion('large')->width(1000)->height(1000);
+    }
+
+
+    public function getAvatarRes(){
+        $currentAvatar = $this->getAvatarAttribute();
+
+        $avatarData = false;
+        if ($currentAvatar){
+            $avatarData = [
+                'id' => $currentAvatar->id,
+                'uuid' => $currentAvatar->uuid,
+                'file_name' => $currentAvatar->file_name,
+                'mime_type' => $currentAvatar->mime_type,
+                'thumbnail' => $currentAvatar->thumbnail,
+                'medium' => $currentAvatar->medium,
+                'large' => $currentAvatar->large,
+                'original_url' => $currentAvatar->original_url,
+                'url' => $currentAvatar->url,
+            ];
+        }
+
+        return $avatarData;
+    }
 
 }

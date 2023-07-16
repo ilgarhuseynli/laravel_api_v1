@@ -9,12 +9,16 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\Admin\UserResource;
 use App\Models\User;
+use App\Traits\MediaUploadingTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
     public function index(Request $request)
     {
+//        DB::connection()->enableQueryLog();
+
         $username = $request->username;
         $name = $request->name;
         $role = $request->role;
@@ -26,7 +30,7 @@ class UsersController extends Controller
         if (!User::checkPermission($role))
             return Res::error('Permission not allowed');
 
-        $userQuery = User::query();
+        $userQuery = User::with('media');
         if (strlen($name) > 0)
             $userQuery->where('name','like','%'.$name.'%');
         if (strlen($username) > 0)
@@ -36,6 +40,9 @@ class UsersController extends Controller
 
         $usersCount = $userQuery->count();
         $users = $userQuery->orderBy($sort[0],$sort[1])->skip($skip)->take($limit)->get();
+
+
+//        $queries = DB::getQueryLog();
 
         return Res::custom([
             'status'=>'success',
@@ -76,7 +83,6 @@ class UsersController extends Controller
         ]);
     }
 
-
     public function store(StoreUserRequest $request)
     {
         $user = User::create($request->validated());
@@ -99,14 +105,8 @@ class UsersController extends Controller
         return Res::success(['id' => $user->id],'Updated successfully');
     }
 
-
     public function updatePassword(Request $request)
     {
-        $userId = $request->id;
-
-        if (!$userId)
-            return Res::error('User not found');
-
         $userData = User::findOrFail($request->id);
 
         if (!User::checkPermission($userData->role_id,'update'))
@@ -134,5 +134,46 @@ class UsersController extends Controller
         $user->delete();
 
         return Res::success([], "Deleted", "Successfully deleted");
+    }
+
+    public function avatarupload(Request $request){
+
+        $userData = User::findOrFail($request->user_id);
+
+        if (!User::checkPermission($userData->role_id,'update'))
+            return Res::error('Permission not allowed');
+
+        if ($userData->avatar)
+            $userData->avatar->delete();
+
+        $validated = $request->validate([
+            'file' => ['required'],
+        ]);
+
+        $currentAvatar =  $userData
+            ->addMedia(storage_path('tmp/uploads/' . $request->input('file')))
+            ->toMediaCollection('avatar');
+
+//            $userData
+//                ->addFromMediaLibraryRequest($request->avatar)
+//                ->toMediaCollection('avatar');
+
+        return Res::success([
+            'id' => $currentAvatar->id,
+            'medium' => $currentAvatar->getUrl('medium'),
+            'url' => $currentAvatar->url,
+        ],'Updated successfully');
+    }
+
+    public function avatardelete(Request $request){
+
+        $userData = User::findOrFail($request->user_id);
+
+        if (!User::checkPermission($userData->role_id,'update'))
+            return Res::error('Permission not allowed');
+
+        $userData->avatar->delete();
+
+        return Res::success(['id' => $userData->id],'Updated successfully');
     }
 }

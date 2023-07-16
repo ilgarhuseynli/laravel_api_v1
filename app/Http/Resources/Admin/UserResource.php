@@ -14,6 +14,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'surname' => $this->surname,
             'name' => $this->name,
+            'avatar' => $this->getAvatarRes(),
             'role' => Role::getById($this->role_id),
             'phone' => $this->phone,
             'address' => $this->address,

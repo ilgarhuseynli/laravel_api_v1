@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\MediaController;
 use App\Http\Controllers\Api\V1\Admin\ParametersController;
 use App\Http\Controllers\Api\V1\Admin\PermissionsController;
 use App\Http\Controllers\Api\V1\Admin\UsersController;
@@ -22,10 +23,14 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
         Route::get('/user', [AuthController::class, 'user']);
         Route::get('/settings', [AuthController::class, 'settings']);
 
+        Route::post('media/store', [MediaController::class,'store']);
+
 
 //        Route::delete('users/destroy', [UsersController::class,'massDestroy'])->name('users.massDestroy');
         Route::get('users/minlist', [UsersController::class,'minlist'])->name('users.minlist');
         Route::put('users/password/edit', [UsersController::class,'updatePassword']);
+        Route::post('users/avatarupload', [UsersController::class,'avatarupload']);
+        Route::delete('users/avatardelete', [UsersController::class,'avatardelete']);
         Route::apiResource('users', UsersController::class);
 
 

@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Traits;
+namespace App\Http\Controllers\Api\V1\Admin;
 
+use App\Classes\Res;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-trait MediaUploadingTrait
+class MediaController extends Controller
 {
-    public function storeMedia(Request $request)
+    public function store(Request $request)
     {
         // Validates file size
         if (request()->has('size')) {
@@ -41,9 +43,10 @@ trait MediaUploadingTrait
 
         $file->move($path, $name);
 
-        return response()->json([
+        return Res::success([
             'name' => $name,
             'original_name' => $file->getClientOriginalName(),
         ]);
     }
+
 }
