@@ -131,6 +131,9 @@ class UsersController extends Controller
         if (!User::checkPermission($user->role_id,'delete'))
             return Res::error('Permission not allowed');
 
+        if ($user->avatar)
+            $user->avatar->delete();
+
         $user->delete();
 
         return Res::success([], "Deleted", "Successfully deleted");
@@ -151,7 +154,7 @@ class UsersController extends Controller
         ]);
 
         $currentAvatar =  $userData
-            ->addMedia(storage_path('tmp/uploads/' . $request->input('file')))
+            ->addMedia(Helpers::getTempFileUrl($request->input('file')))
             ->toMediaCollection('avatar');
 
 //            $userData

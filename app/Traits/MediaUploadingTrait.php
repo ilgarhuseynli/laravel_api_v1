@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Classes\Helpers;
 use Illuminate\Http\Request;
 
 trait MediaUploadingTrait
@@ -26,7 +27,7 @@ trait MediaUploadingTrait
             ]);
         }
 
-        $path = storage_path('tmp/uploads');
+        $path = Helpers::getTempFileUrl();
 
         try {
             if (!file_exists($path)) {

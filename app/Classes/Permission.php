@@ -12,6 +12,7 @@ class Permission
         $list = [
             'general' => ['title' => 'General','value' => 'general'],
             'order_management' => ['title' => 'Order Management','value' => 'order_management'],
+            'product_management' => ['title' => 'Product Management','value' => 'product_management'],
         ];
 
         return $key ? $list[$key] : $list;
@@ -25,6 +26,7 @@ class Permission
             'user' => ['title' => 'Users','value' => 'user'],
             'permission' => ['title' => 'Permissions','value' => 'permission'],
             'order' => ['title' => 'Order','value' => 'order'],
+            'product' => ['title' => 'Product','value' => 'product'],
         ];
 
         return $key ? $list[$key] : $list;
@@ -154,6 +156,36 @@ class Permission
                 "variants" => ['self','all'],
             ],
 
+
+            "product_view" => [
+                "value" => "product_view",
+                "title" => "View",
+                "group" => 'product',
+                "service" => 'product_management',
+                "variants" => ['self','all'],
+            ],
+            "product_create" => [
+                "value" => "product_create",
+                "title" => "Create",
+                "group" => 'product',
+                "service" => 'product_management',
+                "variants" => ['self','all'],
+            ],
+            "product_update" => [
+                "value" => "product_update",
+                "title" => "Update",
+                "group" => 'product',
+                "service" => 'product_management',
+                "variants" => ['self','all'],
+            ],
+            "product_delete" => [
+                "value" => "product_delete",
+                "title" => "Delete",
+                "group" => 'product',
+                "service" => 'product_management',
+                "variants" => ['self','all'],
+            ],
+
         ];
 
 
@@ -200,6 +232,11 @@ class Permission
             'order_create' => 'all',
             'order_update' => 'all',
             'order_delete' => 'all',
+
+            'product_view' => 'all',
+            'product_create' => 'all',
+            'product_update' => 'all',
+            'product_delete' => 'all',
         ];
 
         return self::permissionsList($allowedPerms);
@@ -209,10 +246,15 @@ class Permission
     public static function getEmployeeList() {
 
         $allowedPerms = [
-            'order_view' => 'all',
-            'order_create' => 'all',
-            'order_update' => 'all',
-            'order_delete' => 'all',
+            'order_view' => 'self',
+            'order_create' => 'self',
+            'order_update' => 'self',
+            'order_delete' => 'self',
+
+            'product_view' => 'self',
+            'product_create' => 'self',
+            'product_update' => 'self',
+            'product_delete' => 'self',
         ];
 
         return self::permissionsList($allowedPerms);

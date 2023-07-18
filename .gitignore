@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/storage
 composer.lock
 package-lock.json
 .env

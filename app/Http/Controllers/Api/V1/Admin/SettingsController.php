@@ -64,10 +64,4 @@ class SettingsController extends Controller
         return back();
     }
 
-//    public function massDestroy(MassDestroySettingRequest $request)
-//    {
-//        Setting::whereIn('id', request('ids'))->delete();
-//
-//        return response(null, Response::HTTP_NO_CONTENT);
-//    }
 }

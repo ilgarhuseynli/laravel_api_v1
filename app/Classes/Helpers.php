@@ -282,4 +282,14 @@ class Helpers
         }
         return false;
     }
+
+
+    public static function getTempFileUrl($fileName = false){
+        if ($fileName){
+            return storage_path('tmp/uploads/' . $fileName);
+        }else{
+            return storage_path('tmp/uploads');
+        }
+    }
+
 }

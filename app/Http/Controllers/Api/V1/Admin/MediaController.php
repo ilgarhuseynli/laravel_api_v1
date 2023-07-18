@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
+use App\Classes\Helpers;
 use App\Classes\Res;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class MediaController extends Controller
             ]);
         }
 
-        $path = storage_path('tmp/uploads');
+        $path = Helpers::getTempFileUrl();
 
         try {
             if (!file_exists($path)) {
