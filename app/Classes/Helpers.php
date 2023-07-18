@@ -243,7 +243,7 @@ class Helpers
         $defaultSortType = @$defaultParams['sort_type'] ?: 'desc';
         $sortType = $sortType ?: $defaultSortType;
 
-        $fields = is_array($fields) ? $fields : ['_id', 'created_at', 'title'];
+        $fields = is_array($fields) ? $fields : ['id', 'created_at', 'title'];
 
         $sort_field = trim(strtolower($sortField));
 
