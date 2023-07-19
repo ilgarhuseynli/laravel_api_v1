@@ -3,65 +3,40 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Classes\Permission;
+use App\Classes\Res;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreSettingRequest;
 use App\Http\Requests\UpdateSettingRequest;
+use App\Http\Resources\Admin\SettingResource;
 use App\Models\Setting;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Request;
 
 class SettingsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        abort_if(!Permission::check('setting_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(!Permission::check('setting_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $settings = Setting::orderBy('id','asc')->get();
+        $settings = Setting::all();
 
-        return view('admin.settings.index', compact('settings'));
+        return Res::custom([
+            'status'=>'success',
+            'data'=> SettingResource::collection($settings),
+        ]);
     }
 
-    public function create()
+    public function update(UpdateSettingRequest $request)
     {
-        abort_if(!Permission::check('setting_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        foreach ($request->validated() as $key=>$value){
 
-        return view('admin.settings.create');
-    }
+            Setting::updateOrCreate([
+                'key' => $key,
+            ],[
+                'value' => $value,
+            ]);
+        }
 
-    public function store(StoreSettingRequest $request)
-    {
-        $setting = Setting::create($request->all());
-
-        return redirect()->route('admin.settings.index');
-    }
-
-    public function edit(Setting $setting)
-    {
-        abort_if(!Permission::check('setting_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('admin.settings.edit', compact('setting'));
-    }
-
-    public function update(UpdateSettingRequest $request, Setting $setting)
-    {
-        $setting->update(['value'=>$request->value]);
-
-        return redirect()->route('admin.settings.index');
-    }
-
-    public function show(Setting $setting)
-    {
-        abort_if(!Permission::check('setting_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return view('admin.settings.show', compact('setting'));
-    }
-
-    public function destroy(Setting $setting)
-    {
-        abort_if(!Permission::check('setting_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $setting->delete();
-
-        return back();
+        return Res::success([],'Updated successfully');
     }
 
 }

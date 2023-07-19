@@ -19,4 +19,26 @@ class Setting extends Model
         'created_at',
         'updated_at',
     ];
+
+
+    const ALLOWED_KEYS = [
+        'title',
+        'description',
+        'logo',
+        'email',
+        'address',
+        'map_location',
+        'short_number',
+        'phone',
+        'opening_hours',
+        'reg_id',
+
+        'social_wp',
+        'social_fb',
+        'social_telegram',
+        'social_instagram',
+        'social_linkedin',
+        'social_twitter',
+    ];
+
 }

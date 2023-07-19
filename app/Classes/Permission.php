@@ -6,11 +6,11 @@ use Illuminate\Support\Facades\Auth;
 
 class Permission
 {
-
     public static function getServices($key = false){
 
         $list = [
             'general' => ['title' => 'General','value' => 'general'],
+            'category_management' => ['title' => 'Category Management','value' => 'category_management'],
             'order_management' => ['title' => 'Order Management','value' => 'order_management'],
             'product_management' => ['title' => 'Product Management','value' => 'product_management'],
         ];
@@ -25,13 +25,14 @@ class Permission
             'employee' => ['title' => 'Employee','value' => 'employee'],
             'user' => ['title' => 'Users','value' => 'user'],
             'permission' => ['title' => 'Permissions','value' => 'permission'],
+            'setting' => ['title' => 'Settings','value' => 'setting'],
+            'category' => ['title' => 'Category','value' => 'category'],
             'order' => ['title' => 'Order','value' => 'order'],
             'product' => ['title' => 'Product','value' => 'product'],
         ];
 
         return $key ? $list[$key] : $list;
     }
-
 
     public static function permissionsList($allowedPerms = false){
 
@@ -40,118 +41,132 @@ class Permission
             "moderator_view" => [
                 "value" => "moderator_view",
                 "title" => "View",
-                "group" => 'moderator',
                 "service" => 'general',
             ],
             "moderator_create" => [
                 "value" => "moderator_create",
                 "title" => "Create",
-                "group" => 'moderator',
                 "service" => 'general',
             ],
             "moderator_update" => [
                 "value" => "moderator_update",
                 "title" => "Update",
-                "group" => 'moderator',
                 "service" => 'general',
             ],
             "moderator_delete" => [
                 "value" => "moderator_delete",
                 "title" => "Delete",
-                "group" => 'moderator',
                 "service" => 'general',
             ],
 
             "employee_view" => [
                 "value" => "employee_view",
                 "title" => "View",
-                "group" => 'employee',
                 "service" => 'general',
             ],
             "employee_create" => [
                 "value" => "employee_create",
                 "title" => "Create",
-                "group" => 'employee',
                 "service" => 'general',
             ],
             "employee_update" => [
                 "value" => "employee_update",
                 "title" => "Update",
-                "group" => 'employee',
                 "service" => 'general',
             ],
             "employee_delete" => [
                 "value" => "employee_delete",
                 "title" => "Delete",
-                "group" => 'employee',
                 "service" => 'general',
             ],
 
             "user_view" => [
                 "value" => "user_view",
                 "title" => "View",
-                "group" => 'user',
                 "service" => 'general',
             ],
             "user_create" => [
                 "value" => "user_create",
                 "title" => "Create",
-                "group" => 'user',
                 "service" => 'general',
             ],
             "user_update" => [
                 "value" => "user_update",
                 "title" => "Update",
-                "group" => 'user',
                 "service" => 'general',
             ],
             "user_delete" => [
                 "value" => "user_delete",
                 "title" => "Delete",
-                "group" => 'user',
                 "service" => 'general',
             ],
-
 
             "permission_view" => [
                 "value" => "permission_view",
                 "title" => "View",
-                "group" => 'permission',
                 "service" => 'general',
             ],
             "permission_update" => [
                 "value" => "permission_update",
                 "title" => "Update",
-                "group" => 'permission',
                 "service" => 'general',
+            ],
+
+            "setting_view" => [
+                "value" => "setting_view",
+                "title" => "View",
+                "service" => 'general',
+            ],
+            "setting_update" => [
+                "value" => "setting_update",
+                "title" => "Update",
+                "service" => 'general',
+            ],
+
+
+            "category_view" => [
+                "value" => "category_view",
+                "title" => "View",
+                "service" => 'category_management',
+            ],
+            "category_create" => [
+                "value" => "category_create",
+                "title" => "Create",
+                "service" => 'category_management',
+            ],
+            "category_update" => [
+                "value" => "category_update",
+                "title" => "Update",
+                "service" => 'category_management',
+            ],
+            "category_delete" => [
+                "value" => "category_delete",
+                "title" => "Delete",
+                "service" => 'category_management',
             ],
 
 
             "order_view" => [
                 "value" => "order_view",
                 "title" => "View",
-                "group" => 'order',
                 "service" => 'order_management',
                 "variants" => ['self','all'],
             ],
             "order_create" => [
                 "value" => "order_create",
                 "title" => "Create",
-                "group" => 'order',
                 "service" => 'order_management',
                 "variants" => ['self','all'],
             ],
             "order_update" => [
                 "value" => "order_update",
                 "title" => "Update",
-                "group" => 'order',
                 "service" => 'order_management',
                 "variants" => ['self','all'],
             ],
             "order_delete" => [
                 "value" => "order_delete",
                 "title" => "Delete",
-                "group" => 'order',
                 "service" => 'order_management',
                 "variants" => ['self','all'],
             ],
@@ -160,30 +175,22 @@ class Permission
             "product_view" => [
                 "value" => "product_view",
                 "title" => "View",
-                "group" => 'product',
                 "service" => 'product_management',
-                "variants" => ['self','all'],
             ],
             "product_create" => [
                 "value" => "product_create",
                 "title" => "Create",
-                "group" => 'product',
                 "service" => 'product_management',
-                "variants" => ['self','all'],
             ],
             "product_update" => [
                 "value" => "product_update",
                 "title" => "Update",
-                "group" => 'product',
                 "service" => 'product_management',
-                "variants" => ['self','all'],
             ],
             "product_delete" => [
                 "value" => "product_delete",
                 "title" => "Delete",
-                "group" => 'product',
                 "service" => 'product_management',
-                "variants" => ['self','all'],
             ],
 
         ];
@@ -228,15 +235,24 @@ class Permission
             'permission_view' => true,
             'permission_update' => true,
 
+            'setting_view' => true,
+            'setting_update' => true,
+
+            'category_view' => true,
+            'category_create' => true,
+            'category_update' => true,
+            'category_delete' => true,
+
+            'product_view' => true,
+            'product_create' => true,
+            'product_update' => true,
+            'product_delete' => true,
+
             'order_view' => 'all',
             'order_create' => 'all',
             'order_update' => 'all',
             'order_delete' => 'all',
 
-            'product_view' => 'all',
-            'product_create' => 'all',
-            'product_update' => 'all',
-            'product_delete' => 'all',
         ];
 
         return self::permissionsList($allowedPerms);
@@ -246,15 +262,20 @@ class Permission
     public static function getEmployeeList() {
 
         $allowedPerms = [
+            'category_view' => false,
+            'category_create' => false,
+            'category_update' => false,
+            'category_delete' => false,
+
             'order_view' => 'self',
             'order_create' => 'self',
             'order_update' => 'self',
             'order_delete' => 'self',
 
-            'product_view' => 'self',
-            'product_create' => 'self',
-            'product_update' => 'self',
-            'product_delete' => 'self',
+            'product_view' => false,
+            'product_create' => false,
+            'product_update' => false,
+            'product_delete' => false,
         ];
 
         return self::permissionsList($allowedPerms);
@@ -296,15 +317,17 @@ class Permission
 
         foreach ($list as $key => $value){
 
+            $currentGroup = explode('_',$key)[0];
+
             if (!$data[$value['service']]){
                 $serviceData = self::getServices($value['service']);
                 $serviceData['groups'] = [];
                 $data[$value['service']] = $serviceData;
             }
 
-            if (!$data[$value['service']]['groups'][$value['group']]){
-                $groupData = self::getGroups($value['group']);
-                $data[$value['service']]['groups'][$value['group']] = $groupData;
+            if (!$data[$value['service']]['groups'][$currentGroup]){
+                $groupData = self::getGroups($currentGroup);
+                $data[$value['service']]['groups'][$currentGroup] = $groupData;
             }
 
             $currentVal = [
@@ -315,14 +338,11 @@ class Permission
                 'variants' => $value['variants'] ? : false,
             ];
 
-            $data[$value['service']]['groups'][$value['group']]['permissions'][$key] = $currentVal;
+            $data[$value['service']]['groups'][$currentGroup]['permissions'][$key] = $currentVal;
         }
 
         return $data;
     }
-
-
-
 
 
     public static function check($key,$type = false){
