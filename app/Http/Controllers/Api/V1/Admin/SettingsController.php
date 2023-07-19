@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateSettingRequest;
 use App\Http\Resources\Admin\SettingResource;
 use App\Models\Setting;
+use Hamcrest\Core\Set;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 
@@ -19,21 +20,32 @@ class SettingsController extends Controller
 
         $settings = Setting::all();
 
+        $settingsByKey = [];
+        foreach ($settings as $setting){
+            $settingsByKey[$setting->key] = $setting->value;
+        }
+
+        $res = [];
+        foreach (Setting::ALLOWED_KEYS as $key){
+            $res[$key] = $settingsByKey[$key] ?? '';
+        }
+
         return Res::custom([
             'status'=>'success',
-            'data'=> SettingResource::collection($settings),
+            'data'=> $res,
         ]);
     }
 
-    public function update(UpdateSettingRequest $request)
+    public function update(Request $request)
     {
-        foreach ($request->validated() as $key=>$value){
-
-            Setting::updateOrCreate([
-                'key' => $key,
-            ],[
-                'value' => $value,
-            ]);
+        foreach ($request->all() as $key=>$value){
+            if (in_array($key,Setting::ALLOWED_KEYS)){
+                Setting::updateOrCreate([
+                    'key' => $key,
+                ],[
+                    'value' => $value,
+                ]);
+            }
         }
 
         return Res::success([],'Updated successfully');

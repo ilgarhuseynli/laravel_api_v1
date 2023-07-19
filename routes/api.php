@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Admin\MediaController;
 use App\Http\Controllers\Api\V1\Admin\ParametersController;
 use App\Http\Controllers\Api\V1\Admin\PermissionsController;
+use App\Http\Controllers\Api\V1\Admin\SettingsController;
 use App\Http\Controllers\Api\V1\Admin\UsersController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Frontend\ServicesApiController;
@@ -38,6 +39,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
         Route::get('permissions',  [PermissionsController::class,'index']);
         Route::put('permissions',  [PermissionsController::class,'update']);
+
+        Route::get('settings',  [SettingsController::class,'index']);
+        Route::put('settings',  [SettingsController::class,'update']);
 
     });
 
