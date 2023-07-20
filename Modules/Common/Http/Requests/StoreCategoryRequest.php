@@ -26,7 +26,7 @@ class StoreCategoryRequest extends FormRequest
             ],
             'type'=>[
                 Rule::in(Category::TYPE_SELECT),
-                'integer',
+                'string',
             ],
             'status'=>[
                 Rule::in([0,1]),

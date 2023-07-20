@@ -3,14 +3,10 @@
 namespace Modules\Common\Entities;
 
 use Illuminate\Support\Str;
-use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Category extends Model implements HasMedia
+class Category extends Model
 {
-    use  InteractsWithMedia;
-
     public $table = 'categories';
 
     protected $dates = [
@@ -46,7 +42,7 @@ class Category extends Model implements HasMedia
 
 
     //WHEN SET ATTRIBUTE FUNCTIONS
-    public function setNameAttribute($value){
+    public function setTitleAttribute($value){
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }

@@ -35,7 +35,7 @@ class CategoryController extends Controller
             $categoryQuery->where('title','like','%'.$title.'%');
         if ($type)
             $categoryQuery->where('type',$type);
-        if ($status)
+        if (strlen($status) > 0)
             $categoryQuery->where('status',$status == 0 ? 0 : 1);
 
         $categorysCount = $categoryQuery->count();
