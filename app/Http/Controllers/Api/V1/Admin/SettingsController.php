@@ -5,10 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Classes\Permission;
 use App\Classes\Res;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateSettingRequest;
-use App\Http\Resources\Admin\SettingResource;
 use App\Models\Setting;
-use Hamcrest\Core\Set;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 

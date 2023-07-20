@@ -22,7 +22,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
     Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/user', [AuthController::class, 'user']);
-        Route::get('/settings', [AuthController::class, 'settings']);
+        Route::get('/authsettings', [AuthController::class, 'settings']);
 
         Route::post('media/store', [MediaController::class,'store']);
 
