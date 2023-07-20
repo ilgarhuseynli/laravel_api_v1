@@ -66,28 +66,14 @@ class Product extends Model implements HasMedia
     //Media image config
     public function getImageAttribute()
     {
-        $file = $this->getMedia('image')->last();
-
-        if ($file) {
-            $file->url = $file->getUrl();
-            $file->thumbnail = $file->getUrl('thumb');
-            $file->medium = $file->getUrl('medium');
-            $file->large = $file->getUrl('large');
-        }
-        return $file;
+        return $this->getMedia('image')->last();
     }
-
 
     public function registerMediaConversions(Media $media = null): void
     {
-//        $this
-//            ->addMediaConversion('preview')
-//            ->fit(Manipulations::FIT_CROP, 300, 300)
-//            ->nonQueued();
+        $this->addMediaConversion('thumb')->width(150)->height(150);
 
-        $this->addMediaConversion('thumb')->width(150)->height(150)->performOnCollections('image');
-
-        $this->addMediaConversion('medium')->width(600)->height(600)->performOnCollections('image');
+        $this->addMediaConversion('medium')->width(600)->height(600);
 
         $this->addMediaConversion('large')->width(1000)->height(1000);
     }

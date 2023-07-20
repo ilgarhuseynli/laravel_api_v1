@@ -100,15 +100,7 @@ class User extends Authenticatable implements HasMedia
 
     public function getAvatarAttribute()
     {
-        $file = $this->getMedia('avatar')->last();
-
-        if ($file) {
-            $file->url = $file->getUrl();
-            $file->thumbnail = $file->getUrl('thumb');
-            $file->medium = $file->getUrl('medium');
-            $file->large = $file->getUrl('large');
-        }
-        return $file;
+        return $this->getMedia('avatar')->last();
     }
 
 
@@ -126,26 +118,5 @@ class User extends Authenticatable implements HasMedia
         $this->addMediaConversion('large')->width(1000)->height(1000);
     }
 
-
-    public function getAvatarRes(){
-        $currentAvatar = $this->getAvatarAttribute();
-
-        $avatarData = false;
-        if ($currentAvatar){
-            $avatarData = [
-                'id' => $currentAvatar->id,
-                'uuid' => $currentAvatar->uuid,
-                'file_name' => $currentAvatar->file_name,
-                'mime_type' => $currentAvatar->mime_type,
-                'thumbnail' => $currentAvatar->thumbnail,
-                'medium' => $currentAvatar->medium,
-                'large' => $currentAvatar->large,
-                'original_url' => $currentAvatar->original_url,
-                'url' => $currentAvatar->url,
-            ];
-        }
-
-        return $avatarData;
-    }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Admin;
 
+use App\Classes\File;
 use App\Classes\Role;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,7 +15,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'surname' => $this->surname,
             'name' => $this->name,
-            'avatar' => $this->getAvatarRes(),
+            'avatar' => File::getFileObject($this->avatar),
             'role' => Role::getById($this->role_id),
             'phone' => $this->phone,
             'address' => $this->address,

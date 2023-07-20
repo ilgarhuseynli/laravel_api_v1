@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Setting extends Model
+class Setting extends Model implements HasMedia
 {
+    use InteractsWithMedia;
+
     public $table = 'settings';
 
     protected $dates = [
@@ -24,7 +29,6 @@ class Setting extends Model
     const ALLOWED_KEYS = [
         'title',
         'description',
-        'logo',
         'email',
         'address',
         'map_location',
@@ -40,5 +44,16 @@ class Setting extends Model
         'social_linkedin',
         'social_twitter',
     ];
+
+
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')->width(150)->height(150);
+
+        $this->addMediaConversion('medium')->width(600)->height(600);
+
+        $this->addMediaConversion('large')->width(1000)->height(1000);
+    }
 
 }

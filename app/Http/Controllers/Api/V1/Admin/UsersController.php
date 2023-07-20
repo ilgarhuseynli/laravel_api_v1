@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
+use App\Classes\File;
 use App\Classes\Helpers;
 use App\Classes\Res;
 use App\Http\Controllers\Controller;
@@ -48,6 +49,7 @@ class UsersController extends Controller
             'status'=>'success',
             'data'=> UserResource::collection($users),
             'count'=>$usersCount,
+//            'queries'=>$queries,
             'skip'=>$skip,
             'limit'=>$limit,
         ]);
@@ -146,12 +148,8 @@ class UsersController extends Controller
         if (!User::checkPermission($userData->role_id,'update'))
             return Res::error('Permission not allowed');
 
-        if ($userData->avatar)
-            $userData->avatar->delete();
-
-        $validated = $request->validate([
-            'file' => ['required'],
-        ]);
+        if (!$request->file)
+            return Res::error('File not set');
 
         $currentAvatar =  $userData
             ->addMedia(Helpers::getTempFileUrl($request->input('file')))
@@ -164,7 +162,7 @@ class UsersController extends Controller
         return Res::success([
             'id' => $currentAvatar->id,
             'medium' => $currentAvatar->getUrl('medium'),
-            'url' => $currentAvatar->url,
+            'url' => $currentAvatar->original_url,
         ],'Updated successfully');
     }
 
@@ -177,6 +175,6 @@ class UsersController extends Controller
 
         $userData->avatar->delete();
 
-        return Res::success(['id' => $userData->id],'Updated successfully');
+        return Res::success([File::noImgRes()],'Updated successfully');
     }
 }

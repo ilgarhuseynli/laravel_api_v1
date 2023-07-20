@@ -42,7 +42,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
         Route::get('settings',  [SettingsController::class,'index']);
         Route::put('settings',  [SettingsController::class,'update']);
-
+        Route::post('settings/fileupload', [SettingsController::class,'fileupload']);
+        Route::delete('settings/filedelete', [SettingsController::class,'filedelete']);
     });
 
 });

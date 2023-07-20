@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Http\Resources;
 
+use App\Classes\File;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -22,8 +23,7 @@ class ProductResource extends JsonResource
                 'label' => $this->category->title,
                 'value' => $this->category->id,
             ],
-
-            'image' => $this->getAvatarRes(),
+            'image' => File::getFileObject($this->image),
             'created_at' => strtotime($this->created_at),
         ];
     }
