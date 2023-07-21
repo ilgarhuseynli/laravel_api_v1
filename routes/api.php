@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\MediaController;
+use App\Http\Controllers\Api\V1\Admin\MultilistController;
 use App\Http\Controllers\Api\V1\Admin\ParametersController;
 use App\Http\Controllers\Api\V1\Admin\PermissionsController;
 use App\Http\Controllers\Api\V1\Admin\SettingsController;
@@ -26,6 +27,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.'], function () {
 
         Route::post('media/store', [MediaController::class,'store']);
 
+        Route::get('multilist',  [MultilistController::class,'index']);
 
 //        Route::delete('users/destroy', [UsersController::class,'massDestroy'])->name('users.massDestroy');
         Route::get('users/minlist', [UsersController::class,'minlist'])->name('users.minlist');

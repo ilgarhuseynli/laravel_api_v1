@@ -38,7 +38,8 @@ class StoreProductRequest extends FormRequest
             ],
             'price'=>[
                 'min:0',
-                'integer',
+                'numeric',
+                'nullable',
             ],
             'status'=>[
                 Rule::in([0,1]),
