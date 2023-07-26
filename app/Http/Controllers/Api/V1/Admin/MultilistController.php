@@ -6,6 +6,7 @@ use App\Classes\Res;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Common\Entities\Category;
+use Modules\Product\Entities\Product;
 
 class MultilistController extends Controller
 {
@@ -26,6 +27,10 @@ class MultilistController extends Controller
                 $binds[] = ['title','like','%'.(string)$filters["query"].'%'];
 
             $list["product_categories"] = Helpers::getMinlistData(new Category(),$binds);
+        }
+
+        if(in_array("product_positions", $keys)){
+            $list["product_positions"] = Product::getPositions();
         }
 
 

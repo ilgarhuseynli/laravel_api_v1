@@ -10,7 +10,6 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\Admin\UserResource;
 use App\Models\User;
-use App\Traits\MediaUploadingTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

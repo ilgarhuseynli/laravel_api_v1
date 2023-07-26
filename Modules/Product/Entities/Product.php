@@ -51,17 +51,22 @@ class Product extends Model implements HasMedia
         'created_at',
     ];
 
-
-    const STATUS_SELECT = [
-        1 => 'Active',
-        0 => 'Deactive',
-    ];
-
     const POSITION_SELECT = [
         1 => 'left',
         2 => 'center',
         3 => 'right',
     ];
+
+    public static function getPositions($val = false){
+        $list = [
+            ['value' => 1,'label' => 'Left', ],
+            ['value' => 2,'label' => 'Center', ],
+            ['value' => 3,'label' => 'Right', ],
+        ];
+
+        return $val ? $list[$val - 1] : $list;
+    }
+
 
     //Media image config
     public function getImageAttribute()

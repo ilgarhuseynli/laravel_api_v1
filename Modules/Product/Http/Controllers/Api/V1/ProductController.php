@@ -25,6 +25,7 @@ class ProductController extends Controller
         $sku = $request->sku;
         $category = $request->category;
         $status = $request->status;
+        $position = $request->position;
 
         $skip = (int)$request->skip;
         $limit = Helpers::manageLimitRequest($request->limit);
@@ -39,7 +40,9 @@ class ProductController extends Controller
             $productQuery->where('title','like','%'.$title.'%');
         if ($category)
             $productQuery->where('category_id',$category);
-        if ($status)
+        if ($position)
+            $productQuery->where('position',$position);
+        if (strlen($status) > 0)
             $productQuery->where('status',$status == 0 ? 0 : 1);
 
         $productsCount = $productQuery->count();
