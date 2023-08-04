@@ -20,6 +20,10 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
+            'file'    => [
+                'string',
+                'nullable',
+            ],
             'title'    => [
                 'max:255',
                 'required',

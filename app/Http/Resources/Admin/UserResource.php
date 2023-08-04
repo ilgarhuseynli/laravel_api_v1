@@ -15,7 +15,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'surname' => $this->surname,
             'name' => $this->name,
-            'avatar' => File::getFileObject($this->avatar),
+            'avatar' => File::getFileObject($this->avatar,'user'),
             'role' => Role::getById($this->role_id),
             'phone' => $this->phone,
             'address' => $this->address,

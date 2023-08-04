@@ -5,7 +5,7 @@ namespace App\Classes;
 class File
 {
 
-    public static function getFileObject($file){
+    public static function getFileObject($file,$type = 'item'){
 
         if ($file){
             $res = [
@@ -20,15 +20,19 @@ class File
                 'url' => $file->getUrl(),
             ];
         }else{
-            $res = self::noImgRes();
+            $res = self::noImgRes($type);
         }
 
         return $res;
     }
 
 
-    public static function noImgRes(){
-        $noImg = config('app.url').'/images/users/noimg-3.png';
+    public static function noImgRes($type = 'item'){
+        if ($type == 'user'){
+            $noImg = config('app.url').'/images/users/noimg-3.png';
+        }else{
+            $noImg = config('app.url').'/images/users/noimg-item.png';
+        }
 
         return [
             'thumbnail' => $noImg,

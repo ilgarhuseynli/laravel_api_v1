@@ -174,6 +174,6 @@ class UsersController extends Controller
 
         $userData->avatar->delete();
 
-        return Res::success([File::noImgRes()],'Updated successfully');
+        return Res::success(File::noImgRes('user'),'Updated successfully');
     }
 }

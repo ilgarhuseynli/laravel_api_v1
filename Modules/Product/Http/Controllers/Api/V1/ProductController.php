@@ -2,6 +2,7 @@
 
 namespace Modules\Product\Http\Controllers\Api\V1;
 
+use App\Classes\File;
 use App\Classes\Helpers;
 use App\Classes\Permission;
 use App\Classes\Res;
@@ -62,7 +63,7 @@ class ProductController extends Controller
     {
         $product = Product::create($request->validated());
 
-        if ($request->input('image', false)) {
+        if ($request->input('file', false)) {
             $product
                 ->addMedia(Helpers::getTempFileUrl($request->input('file')))
                 ->toMediaCollection('image');
@@ -118,7 +119,7 @@ class ProductController extends Controller
         return Res::success([
             'id' => $currentFile->id,
             'medium' => $currentFile->getUrl('medium'),
-            'url' => $currentFile->url,
+            'url' => $currentFile->getUrl(),
         ],'Updated successfully');
     }
 
@@ -129,7 +130,7 @@ class ProductController extends Controller
 
         $productData->image->delete();
 
-        return Res::success(['id' => $productData->id],'Updated successfully');
+        return Res::success(File::noImgRes(),'Updated successfully');
     }
 
 }

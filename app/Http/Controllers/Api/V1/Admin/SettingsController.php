@@ -98,7 +98,7 @@ class SettingsController extends Controller
 
         $settingData->update(['value'=>'']);
 
-        return Res::success([File::noImgRes()],'Updated successfully');
+        return Res::success(File::noImgRes(),'Updated successfully');
     }
 
 }
