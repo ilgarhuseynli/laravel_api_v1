@@ -72,6 +72,12 @@ return [
 
     'timezone' => 'UTC',
 
+
+    //1 usd
+    //2 azn
+    //3 eur
+    'currency' => 2,
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

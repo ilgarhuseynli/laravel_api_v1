@@ -1,5 +1,7 @@
 {
     "Service": true,
     "Product": true,
-    "Common": true
+    "Common": true,
+    "Order": true,
+    "Invoice": true
 }

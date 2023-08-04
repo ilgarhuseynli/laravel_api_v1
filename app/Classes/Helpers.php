@@ -306,4 +306,23 @@ class Helpers
 
         return $res;
     }
+
+
+    public static function resError($description, $code = 2222)
+    {
+        return [
+            'status' => 'error',
+            'error_code' => $code,
+            'description' => $description,
+        ];
+    }
+
+    public static function resSuccess($data = [], $description = "")
+    {
+        return [
+            "status" => "success",
+            "description" => $description,
+            "data" => $data
+        ];
+    }
 }

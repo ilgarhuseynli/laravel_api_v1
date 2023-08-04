@@ -38,14 +38,15 @@ class Parameters
     }
 
 
-    public static function currency_list()
+    public static function currency_list($id = false)
     {
-        return [
+        $list = [
             ['id' => 1, 'value' => 1, 'sign' => '$', 'slug' => 'usd', 'label' => 'USD'],
             ['id' => 2, 'value' => 2, 'sign' => '₼', 'slug' => 'azn', 'label' => 'AZN'],
             ['id' => 3, 'value' => 3, 'sign' => '€', 'slug' => 'eur', 'label' => 'EUR'],
         ];
-    }
 
+        return $id ? $list[$id - 1] : $list;
+    }
 
 }
