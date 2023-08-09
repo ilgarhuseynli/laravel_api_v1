@@ -12,13 +12,12 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'username' => $this->username,
             'surname' => $this->surname,
             'name' => $this->name,
+            'address_list' => $this->address_list ?? [],
             'avatar' => File::getFileObject($this->avatar,'user'),
             'role' => Role::getById($this->role_id),
             'phone' => $this->phone,
-            'address' => $this->address,
             'email' => $this->email,
             'created_at' => strtotime($this->created_at),
         ];

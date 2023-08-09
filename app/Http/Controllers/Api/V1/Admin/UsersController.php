@@ -19,7 +19,7 @@ class UsersController extends Controller
     {
 //        DB::connection()->enableQueryLog();
 
-        $username = $request->username;
+        $keyword = $request->keyword;
         $name = $request->name;
         $role = $request->role;
 
@@ -31,10 +31,11 @@ class UsersController extends Controller
             return Res::error('Permission not allowed');
 
         $userQuery = User::with('media');
+
         if (strlen($name) > 0)
             $userQuery->where('name','like','%'.$name.'%');
-        if (strlen($username) > 0)
-            $userQuery->where('username','like','%'.$username.'%');
+        if (strlen($keyword) > 0)
+            $userQuery->where('keyword','like','%'.$keyword.'%');
         if ($role)
             $userQuery->where('role_id',$role);
 
@@ -56,9 +57,9 @@ class UsersController extends Controller
 
     public function minlist(Request $request)
     {
+        $keyword = $request->keyword;
         $name = $request->name;
         $role = $request->role;
-        $username = $request->username;
 
         $skip = (int)$request->skip;
         $limit = Helpers::manageLimitRequest($request->limit);
@@ -67,8 +68,8 @@ class UsersController extends Controller
 
         if (strlen($name) > 0)
             $userQuery->where('name','like','%'.$name.'%');
-        if (strlen($username) > 0)
-            $userQuery->where('username','like','%'.$username.'%');
+        if (strlen($keyword) > 0)
+            $userQuery->where('keyword','like','%'.$keyword.'%');
         if ($role)
             $userQuery->where('role_id',$role);
 
@@ -86,7 +87,10 @@ class UsersController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $user = User::create($request->validated());
+        $validUserFields = $request->validated();
+        $validUserFields['keyword'] = User::joinKeywords($request);
+
+        $user = User::create($validUserFields);
 
         return Res::success(['id' => $user->id],'Created successfully');
     }
@@ -101,7 +105,10 @@ class UsersController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user->update($request->validated());
+        $validUserFields = $request->validated();
+        $validUserFields['keyword'] = User::joinKeywords($request);
+
+        $user->update($validUserFields);
 
         return Res::success(['id' => $user->id],'Updated successfully');
     }

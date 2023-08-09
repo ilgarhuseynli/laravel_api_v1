@@ -20,14 +20,15 @@ class User extends Authenticatable implements HasMedia
     public $table = 'users';
 
     protected $fillable = [
-        "username",
+//        "username",
+        "keyword",
         "surname",
         'name',
         'email',
         "phone",
-        "address",
         "role_id",
         "permissions",
+        "address_list",
         'password',
         'deleted_at',
     ];
@@ -38,7 +39,7 @@ class User extends Authenticatable implements HasMedia
 
     public static $sortable = [
         "id",
-        "username",
+//        "username",
         "surname",
         'name',
         'email',
@@ -56,12 +57,28 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'permissions' => 'array',
+        'address_list' => 'array',
     ];
 
     const ROLE_MODERATOR = 1;
     const ROLE_EMPLOYEE = 2;
     const ROLE_USER = 3;
 
+    const ROLES_LIST = [
+        self::ROLE_MODERATOR => 'moderator',
+        self::ROLE_EMPLOYEE => 'employee',
+        self::ROLE_USER => 'user',
+    ];
+
+    public static function getRoleList($val = false){
+        $list = [
+            ['value' => self::ROLE_MODERATOR, 'label' => 'Moderator', ],
+            ['value' => self::ROLE_EMPLOYEE, 'label' => 'Employee', ],
+            ['value' => self::ROLE_USER, 'label' => 'User', ],
+        ];
+
+        return $val ? $list[$val - 1] : $list;
+    }
 
     public function getPermissions(){
         $currentUserPerms = (array)$this->permissions;
@@ -103,6 +120,10 @@ class User extends Authenticatable implements HasMedia
         return $this->getMedia('avatar')->last();
     }
 
+    public function getFullnameAttribute()
+    {
+        return $this->name.' '.$this->surname;
+    }
 
     public function registerMediaConversions(Media $media = null): void
     {
@@ -118,5 +139,7 @@ class User extends Authenticatable implements HasMedia
         $this->addMediaConversion('large')->width(1000)->height(1000);
     }
 
-
+    public static function joinKeywords($request){
+        return $request->name.' '.$request->surname.' '.$request->phone.' '.$request->email;
+    }
 }

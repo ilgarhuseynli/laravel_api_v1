@@ -25,6 +25,7 @@ class OrderController extends Controller
 
         $ticket_number = $request->ticket_number;
         $address = $request->address;
+        $phone = $request->phone;
         $payment_type = $request->payment_type;
         $status = $request->status;
         $customer_id = $request->customer_id;
@@ -49,6 +50,9 @@ class OrderController extends Controller
 
         if ($ticket_number)
             $orderQuery->where('ticket_number',$ticket_number);
+
+        if (strlen($phone) > 0)
+            $orderQuery->where('phone','like','%'.$phone.'%');
 
         if (strlen($address) > 0)
             $orderQuery->where('address','like','%'.$address.'%');

@@ -8,29 +8,36 @@ class SettingsTableSeeder extends Seeder
 {
     public function run()
     {
+
         $settings = [
             [
-                'key'   => 'contact_phone',
-                'value' => '(+994 55) 555-55-55'
+                'key'   => 'title',
+                'value' => 'Water service'
             ],
             [
-                'key'   => 'contact_home_phone',
-                'value' => '(+994 55) 555-55-55'
+                'key'   => 'description',
+                'value' => 'Water service desc'
             ],
             [
-                'key'   => 'contact_email',
+                'key'   => 'email',
                 'value' => 'info@ultrafixappliance.com'
             ],
             [
-                'key'   => 'contact_location',
+                'key'   => 'address',
                 'value' => 'Nərimanov rayonu Albert Aqarunov küçəsi 14a-22b'
             ],
+
             [
-                'key'   => 'work_hours',
+                'key'   => 'phone',
+                'value' => '(+994 55) 555-55-55'
+            ],
+
+            [
+                'key'   => 'opening_hours',
                 'value' => '09:00 - 18:00'
             ],
             [
-                'key'   => 'social_facebook',
+                'key'   => 'social_fb',
                 'value' => 'facebook.com'
             ],
             [
@@ -50,12 +57,12 @@ class SettingsTableSeeder extends Seeder
                 'value' => 'youtube.com'
             ],
             [
-                'key'   => 'social_skype_name',
-                'value' => '#skype_ultrafix'
+                'key'   => 'social_wp',
+                'value' => 'wp'
             ],
             [
-                'key'   => 'social_instagram_name',
-                'value' => '#ultrafix'
+                'key'   => 'social_telegram',
+                'value' => 'telegram'
             ],
         ];
 

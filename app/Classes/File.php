@@ -13,6 +13,7 @@ class File
                 'uuid' => $file->uuid,
                 'file_name' => $file->file_name,
                 'mime_type' => $file->mime_type,
+                'thumb' => $file->getUrl('thumb'),
                 'thumbnail' => $file->getUrl('thumb'),
                 'medium' => $file->getUrl('medium'),
                 'large' => $file->getUrl('large'),
@@ -35,6 +36,7 @@ class File
         }
 
         return [
+            'thumb' => $noImg,
             'thumbnail' => $noImg,
             'medium' => $noImg,
             'large' => $noImg,

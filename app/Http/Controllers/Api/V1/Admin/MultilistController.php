@@ -6,6 +6,8 @@ use App\Classes\Res;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\Common\Entities\Category;
+use Modules\Order\Entities\Order;
+use Modules\Order\Entities\OrderItem;
 use Modules\Product\Entities\Product;
 
 class MultilistController extends Controller
@@ -31,6 +33,18 @@ class MultilistController extends Controller
 
         if(in_array("product_positions", $keys)){
             $list["product_positions"] = Product::getPositions();
+        }
+
+        if(in_array("order_statuses", $keys)){
+            $list["order_statuses"] = Order::getStatusList();
+        }
+
+        if(in_array("payment_types", $keys)){
+            $list["payment_types"] = Order::getPaymentTypes();
+        }
+
+        if(in_array("discount_types", $keys)){
+            $list["discount_types"] = OrderItem::getDiscountTypes();
         }
 
 

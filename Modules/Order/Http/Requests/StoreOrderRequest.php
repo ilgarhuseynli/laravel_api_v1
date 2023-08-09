@@ -29,6 +29,12 @@ class StoreOrderRequest extends FormRequest
                 'max:255',
                 'required',
             ],
+            'phone' => [
+                'min:10',
+                'max:20',
+                'required',
+                'numeric',
+            ],
             'payment_type' => [
                 Rule::in(array_keys(Order::PAYMENT_TYPES)),
                 'required',
@@ -38,7 +44,7 @@ class StoreOrderRequest extends FormRequest
                 'required'
             ],
             'customer_id' => [
-                'required',
+                'nullable',
                 'exists:users,id'
             ],
             'order_date' => [

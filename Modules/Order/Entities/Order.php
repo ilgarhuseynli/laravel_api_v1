@@ -21,6 +21,7 @@ class Order extends Model
 
     protected $fillable = [
         'ticket_number',
+        'phone',
         'address',
         'total_amount',
         'total_discount',

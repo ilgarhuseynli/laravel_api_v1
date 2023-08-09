@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->integer('ticket_number');
             $table->string('address');
-            $table->string('note');
-            $table->string('manager_note');
+            $table->string('phone');
+            $table->string('note')->nullable();
+            $table->string('manager_note')->nullable();
             $table->float('total_amount');
             $table->float('total_discount');
             $table->float('total_to_pay');
@@ -25,10 +26,10 @@ return new class extends Migration
             $table->dateTimeTz('order_date');
             $table->dateTimeTz('completed_at');
 
-            $table->unsignedInteger('customer_id')->nullable();
+            $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreign('customer_id', 'customer_fk_522743')->references('id')->on('users')->onDelete('RESTRICT');
 
-            $table->unsignedInteger('creator_id')->nullable();
+            $table->unsignedBigInteger('creator_id')->nullable();
             $table->foreign('creator_id', 'creator_fk_224143')->references('id')->on('users')->onDelete('RESTRICT');
 
             $table->timestamps();

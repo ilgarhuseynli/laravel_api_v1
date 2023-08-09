@@ -15,14 +15,16 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
-//            SettingsTableSeeder::class,
+            SettingsTableSeeder::class,
         ]);
 
 
         \App\Models\User::factory()->create([
             'name' => 'Admin',
             'surname' => 'Admin',
-            'username' => 'admin',
+            'keyword'  => 'Admin admin@admin.com 12345678922',
+            'phone' => '12345678922',
+//            'username' => 'admin',
             'role_id' => User::ROLE_MODERATOR,
             'email' => 'admin@admin.com',
             'password' => Hash::make('password'),

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreUserRequest extends FormRequest
 {
@@ -27,17 +28,14 @@ class StoreUserRequest extends FormRequest
                 'required',
             ],
             'phone' => [
+                'digits_between:10,20',
                 'nullable',
-                'string',
+                'numeric',
             ],
-            'address' => [
-                'nullable',
-                'string',
-            ],
-            'username' => [
-                'required',
-                'unique:users,username,NULL,id,deleted_at,NULL',
-            ],
+//            'username' => [
+//                'required',
+//                'unique:users,username,NULL,id,deleted_at,NULL',
+//            ],
             'email' => [
                 'required',
                 'unique:users,email,NULL,id,deleted_at,NULL',
@@ -49,9 +47,20 @@ class StoreUserRequest extends FormRequest
                 'confirmed'
             ],
             'role_id' => [
-                'required',
+                Rule::in(array_keys(User::ROLES_LIST)),
                 'integer',
+                'required'
             ],
+
+
+            'address_list' => [
+                'nullable',
+                'array',
+            ],
+            'address_list.*' => [
+                'max:255',
+            ],
+
         ];
     }
 }

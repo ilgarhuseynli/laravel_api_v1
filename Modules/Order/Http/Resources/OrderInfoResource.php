@@ -14,6 +14,7 @@ class OrderInfoResource extends JsonResource
             'id' => $this->id,
             'ticket_number' => $this->ticket_number,
             'address' => $this->address,
+            'phone' => $this->phone,
             'currency' => Parameters::currency_list(config('app.currency')),
             'total_amount' => $this->total_amount,
             'total_discount' => $this->total_discount,

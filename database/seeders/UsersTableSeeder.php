@@ -12,7 +12,10 @@ class UsersTableSeeder extends Seeder
         $users = [
             [
                 'id'             => 1,
+                'keyword'        => 'Admin admin@admin.com 12345678922',
                 'name'           => 'Admin',
+                'surname'        => 'Admin',
+                'phone'          => '12345678922',
                 'role_id'        => User::ROLE_MODERATOR,
                 'email'          => 'admin@admin.com',
                 'password'       => Hash::make('password'), //bcrypt('password'),
