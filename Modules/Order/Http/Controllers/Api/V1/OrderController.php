@@ -28,8 +28,8 @@ class OrderController extends Controller
         $phone = $request->phone;
         $payment_type = $request->payment_type;
         $status = $request->status;
-        $customer_id = $request->customer_id;
-        $creator_id = $request->creator_id;
+        $user = $request->user;
+        $creator = $request->creator;
         $completed_at = $request->completed_at;
         $order_date = $request->order_date;
         $created_at = $request->created_at;
@@ -42,11 +42,11 @@ class OrderController extends Controller
 
         $orderQuery = Order::with('customer','creator');
 
-        if ($creator_id)
-            $orderQuery->where('creator_id',$creator_id);
+        if ($creator)
+            $orderQuery->where('creator_id',$creator);
 
-        if ($customer_id)
-            $orderQuery->where('customer_id',$customer_id);
+        if ($user)
+            $orderQuery->where('customer_id',$user);
 
         if ($ticket_number)
             $orderQuery->where('ticket_number',$ticket_number);

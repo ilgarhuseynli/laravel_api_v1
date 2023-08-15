@@ -21,10 +21,6 @@ class StoreOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => [
-                'max:255',
-                'required',
-            ],
             'address' => [
                 'max:255',
                 'required',

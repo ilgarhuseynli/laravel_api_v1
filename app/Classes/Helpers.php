@@ -294,6 +294,7 @@ class Helpers
     }
 
     public static function getMinlistData($class,$binds,$key = 'title'){
+
         $list = $class::where($binds)->orderBy($key)->skip(0)->take(50)->get();
 
         $res = [];

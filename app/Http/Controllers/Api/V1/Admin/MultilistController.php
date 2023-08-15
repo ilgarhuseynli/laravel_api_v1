@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Classes\Helpers;
 use App\Classes\Res;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Modules\Common\Entities\Category;
 use Modules\Order\Entities\Order;
@@ -20,16 +21,9 @@ class MultilistController extends Controller
         $keys      = (array)$data['keys'];
         $key       = (string)$data['key'];
         $filters   = (array)$data['filters'];
+        $query   = (string)$filters['query'];
 
         $list = [];
-
-        if(in_array("product_categories", $keys) || $key == "product_categories"){
-            $binds = [['type','product'], ['status',1]];
-            if (strlen((string)$filters["query"]) > 0)
-                $binds[] = ['title','like','%'.(string)$filters["query"].'%'];
-
-            $list["product_categories"] = Helpers::getMinlistData(new Category(),$binds);
-        }
 
         if(in_array("product_positions", $keys)){
             $list["product_positions"] = Product::getPositions();
@@ -46,6 +40,32 @@ class MultilistController extends Controller
         if(in_array("discount_types", $keys)){
             $list["discount_types"] = OrderItem::getDiscountTypes();
         }
+
+
+        if(in_array("product_categories", $keys) || $key == "product_categories"){
+            $binds = [['type','product'], ['status',1]];
+            if (strlen($query) > 0)
+                $binds[] = ['title','like','%'.$query.'%'];
+
+            $list["product_categories"] = Helpers::getMinlistData(new Category(),$binds);
+        }
+
+        if(in_array("users", $keys) || $key == "users"){
+            $binds = [['role_id',User::ROLE_USER]];
+            if (strlen($query) > 0)
+                $binds[] = ['keyword','like','%'.$query.'%'];
+
+            $list["users"] = Helpers::getMinlistData(new User(),$binds,'name');
+        }
+
+        if(in_array("employees", $keys) || $key == "employees"){
+            $binds = [['role_id','!=',User::ROLE_USER]];
+            if (strlen($query) > 0)
+                $binds[] = ['keyword','like','%'.$query.'%'];
+
+            $list["employees"] = Helpers::getMinlistData(new User(),$binds,'name');
+        }
+
 
 
 //        if(in_array("render_types", $keys)){
@@ -69,20 +89,12 @@ class MultilistController extends Controller
 //            $binds = ["type" => "service", "data_type" => "file"];
 //            if(strlen(trim((string)$filters["titles"])) > 0)
 //                $binds["titles.".Lang::$_lang] = ['$regex' => trim(strtolower((string)$filters["titles"])), '$options'  => 'i'];
-//            if(strlen(trim((string)$filters["query"])) > 0)
-//                $binds["titles.".Lang::$_lang] = ['$regex' => trim(strtolower((string)$filters["query"])), '$options'  => 'i'];
+//            if(strlen(trim($query)) > 0)
+//                $binds["titles.".Lang::$_lang] = ['$regex' => trim(strtolower($query)), '$options'  => 'i'];
 //            $binds["is_deleted"] = ['$ne' => 1];
 //            $list["service_categories"] = Helpers::getMinList(new Categories(), $binds, ["parent" => 1]);
 //        }
 //
-
-//        if(in_array("users", $keys) || $key == "users"){
-//            $list["users"] = Corelist::getUsers("user", strlen(trim((string)$filters["query"])) > 0 ? (string)$filters["query"] : "");
-//        }
-//
-//        if(in_array("employees", $keys) || $key == "employees"){
-//            $list["employees"] = Corelist::getUsers("employee", strlen(trim((string)$filters["query"])) > 0 ? (string)$filters["query"] : "");
-//        }
 
 
         return Res::success($key ? $list[$key] : $list);
