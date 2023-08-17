@@ -26,8 +26,7 @@ class UpdateOrderRequest extends FormRequest
                 'required',
             ],
             'phone' => [
-                'min:10',
-                'max:20',
+                'digits_between:10,20',
                 'required',
                 'numeric',
             ],
@@ -77,7 +76,7 @@ class UpdateOrderRequest extends FormRequest
                 'min:0'
             ],
             'items.discount_type.*' => [
-                Rule::in(array_keys(OrderItem::DISCOUNT_TYPE)),
+                Rule::in(array_keys(OrderItem::DISCOUNT_TYPES)),
                 'required_with:items.discount_value.*',
                 'nullable',
             ],

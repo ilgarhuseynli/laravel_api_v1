@@ -33,7 +33,7 @@ class OrderItem extends Model
     const DISCOUNT_TYPE_PERCENT = 1;
     const DISCOUNT_TYPE_AMOUNT = 2;
 
-    const DISCOUNT_TYPE = [
+    const DISCOUNT_TYPES = [
         self::DISCOUNT_TYPE_PERCENT => 'percent',
         self::DISCOUNT_TYPE_AMOUNT => 'amount',
     ];

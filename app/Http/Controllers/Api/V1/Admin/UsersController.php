@@ -97,7 +97,7 @@ class UsersController extends Controller
 
     public function show(User $user)
     {
-        if (!User::checkPermission($user->role_id,'create'))
+        if (!User::checkPermission($user->role_id,'view'))
             return Res::error('Permission not allowed');
 
         return Res::success(new UserResource($user));

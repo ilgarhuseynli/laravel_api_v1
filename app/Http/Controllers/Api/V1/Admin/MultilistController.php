@@ -50,6 +50,16 @@ class MultilistController extends Controller
             $list["product_categories"] = Helpers::getMinlistData(new Category(),$binds);
         }
 
+
+        if(in_array("products", $keys) || $key == "products"){
+            $binds = [['status',1]];
+            if (strlen($query) > 0)
+                $binds[] = ['title','like','%'.$query.'%'];
+
+            $list["products"] = Helpers::getMinlistData(new Product(),$binds,'title',['price']);
+        }
+
+
         if(in_array("users", $keys) || $key == "users"){
             $binds = [['role_id',User::ROLE_USER]];
             if (strlen($query) > 0)

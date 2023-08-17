@@ -293,16 +293,19 @@ class Helpers
         }
     }
 
-    public static function getMinlistData($class,$binds,$key = 'title'){
+    public static function getMinlistData($class,$binds,$key = 'title',$extraInfo = []){
 
         $list = $class::where($binds)->orderBy($key)->skip(0)->take(50)->get();
 
         $res = [];
         foreach ($list as $item){
-            $res[] = [
-                'label' => $item->{$key},
-                'value' => $item->id,
-            ];
+
+            $currentVal = ['label' => $item->{$key}, 'value' => $item->id ];
+
+            foreach ($extraInfo as $extra)
+                $currentVal[$extra] = $item->{$extra};
+
+            $res[] = $currentVal;
         }
 
         return $res;

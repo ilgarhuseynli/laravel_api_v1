@@ -29,8 +29,7 @@ class UpdateUserRequest extends FormRequest
                 'required',
             ],
             'phone' => [
-                'min:10',
-                'max:20',
+                'digits_between:10,20',
                 'nullable',
                 'numeric',
             ],
@@ -48,9 +47,13 @@ class UpdateUserRequest extends FormRequest
 //                'required'
 //            ],
 
+
             'address_list' => [
                 'nullable',
-                'string',
+                'array',
+            ],
+            'address_list.*' => [
+                'max:255',
             ],
 
         ];
