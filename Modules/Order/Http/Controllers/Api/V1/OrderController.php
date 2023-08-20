@@ -111,7 +111,7 @@ class OrderController extends Controller
         }
 
         //prepare order
-        $validOrder = Order::prepareValidRequestData($request,$validOrderItems);
+        $validOrder = Order::prepareValidRequestData($request,$validOrderItems,'edit');
 
         $order->update($validOrder);
 

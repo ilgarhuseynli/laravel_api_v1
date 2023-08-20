@@ -30,21 +30,31 @@ class OrderItem extends Model
         'updated_at'
     ];
 
-    const DISCOUNT_TYPE_PERCENT = 1;
-    const DISCOUNT_TYPE_AMOUNT = 2;
+    protected $attributes = [
+        'title' => '',
+    ];
+
+    const DISCOUNT_TYPE_PERCENT = 'percent';
+    const DISCOUNT_TYPE_AMOUNT = 'amount';
 
     const DISCOUNT_TYPES = [
-        self::DISCOUNT_TYPE_PERCENT => 'percent',
-        self::DISCOUNT_TYPE_AMOUNT => 'amount',
+        self::DISCOUNT_TYPE_PERCENT,
+        self::DISCOUNT_TYPE_AMOUNT,
     ];
 
     public static function getDiscountTypes($val = false){
-        $list = [
-            ['value' => self::DISCOUNT_TYPE_PERCENT,'label' => 'Percent', ],
-            ['value' => self::DISCOUNT_TYPE_AMOUNT,'label' => 'Amount', ],
+        $response = [
+            ['value' => self::DISCOUNT_TYPE_PERCENT,'label' => 'Percent','sign' => '%', ],
+            ['value' => self::DISCOUNT_TYPE_AMOUNT,'label' => 'Amount','sign' => 'AZN',  ],
         ];
 
-        return $val ? $list[$val - 1] : $list;
+        if ($val && $val == self::DISCOUNT_TYPE_PERCENT){
+            $response = $response[0];
+        }elseif($val && $val == self::DISCOUNT_TYPE_AMOUNT){
+            $response = $response[1];
+        }
+
+        return $response;
     }
 
 
@@ -69,16 +79,18 @@ class OrderItem extends Model
             if ($item['discount_value']){
                 if ($item['discount_type'] == self::DISCOUNT_TYPE_AMOUNT){
                     $item['total_discount'] = $item['discount_value'];
-                }else{
-                    $item['total_discount'] = ($item['total'] / $item['discount_value']) / 100;
+                }else if($item['discount_type'] == self::DISCOUNT_TYPE_PERCENT){
+                    $item['total_discount'] = ($item['total'] * $item['discount_value']) / 100;
                     $item['total_discount'] = Helpers::roundFloatValue($item['total_discount']);
                 }
             }
 
             //break when error
             if ($item['total_discount'] > $item['total']){
-                return Helpers::resError('Discount greather than total',6030);
+                return Helpers::resError('Discount greather than total',400);
             }
+
+            $item['total'] = $item['total'] - $item['total_discount'];
 
             $validRequest[] = $item;
         }

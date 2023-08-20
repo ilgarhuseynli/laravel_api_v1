@@ -21,6 +21,7 @@ class Order extends Model
 
     protected $fillable = [
         'ticket_number',
+        'name',
         'phone',
         'address',
         'total_amount',
@@ -110,16 +111,18 @@ class Order extends Model
     public static function getNextTicketNum()
     {
         $lastOrder = Order::orderBy('ticket_number', 'desc')->first();
-        $lastTicketNum = $lastOrder ? $lastOrder->ticket_num : 0;
+        $lastTicketNum = $lastOrder ? $lastOrder->ticket_number : 0;
         return $lastTicketNum + 1;
     }
 
 
-    public static function prepareValidRequestData($request,$items)
+    public static function prepareValidRequestData($request,$items,$action = 'add')
     {
         $validRequest = $request->validated();
 
-        $validRequest['ticket_number'] = self::getNextTicketNum();
+        if ($action == 'add')
+            $validRequest['ticket_number'] = self::getNextTicketNum();
+
         $validRequest['creator_id'] = Auth::id();
 
         $validRequest['total_amount'] = 0;
@@ -127,9 +130,9 @@ class Order extends Model
         $validRequest['total_to_pay'] = 0;
 
         foreach ($items as $item){
-            $total = $item['total'];
+            $totalToPay = $item['total'];
             $totalDiscount = $item['total_discount'];
-            $totalToPay = $total - $totalDiscount;
+            $total = $totalToPay + $totalDiscount;
 
             $validRequest['total_amount'] += $total;
             $validRequest['total_discount'] += $totalDiscount;

@@ -25,6 +25,10 @@ class UpdateOrderRequest extends FormRequest
                 'max:255',
                 'required',
             ],
+            'name' => [
+                'max:255',
+                'required',
+            ],
             'phone' => [
                 'digits_between:10,20',
                 'required',
@@ -60,35 +64,32 @@ class UpdateOrderRequest extends FormRequest
                 'required',
                 'array',
             ],
-            'items.title.*' => [
+            'items.*.title' => [
                 'max:255',
-            ],
-            'items.price.*' => [
-                'numeric',
-                'min:0'
-            ],
-            'items.total.*' => [
-                'numeric',
-                'min:0'
-            ],
-            'items.quantity.*' => [
-                'numeric',
-                'min:0'
-            ],
-            'items.discount_type.*' => [
-                Rule::in(array_keys(OrderItem::DISCOUNT_TYPES)),
-                'required_with:items.discount_value.*',
                 'nullable',
             ],
-            'items.discount_value.*' => [
-                'required_with:items.discount_type.*',
+            'items.*.price' => [
+                'numeric',
+                'min:0'
+            ],
+            'items.*.quantity' => [
+                'numeric',
+                'min:1'
+            ],
+            'items.*.discount_type' => [
+                Rule::in(OrderItem::DISCOUNT_TYPES),
+                'required_with:items.*.discount_value',
+                'nullable',
+            ],
+            'items.*.discount_value' => [
+                'required_with:items.*.discount_type',
                 'nullable',
                 'numeric',
                 'min:0'
             ],
-            'items.product_id.*' => [
-                'nullable',
-                'exists:products,id'
+            'items.*.product_id' => [
+                'required',
+                'exists:products,id',
             ],
         ];
     }

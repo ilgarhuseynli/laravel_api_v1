@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('ticket_number');
             $table->string('address');
             $table->string('phone');
+            $table->string('name');
             $table->string('note')->nullable();
             $table->string('manager_note')->nullable();
             $table->float('total_amount');
@@ -24,7 +25,7 @@ return new class extends Migration
             $table->tinyInteger('payment_type');
             $table->tinyInteger('status');
             $table->dateTimeTz('order_date');
-            $table->dateTimeTz('completed_at');
+            $table->dateTimeTz('completed_at')->nullable();
 
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreign('customer_id', 'customer_fk_522743')->references('id')->on('users')->onDelete('RESTRICT');

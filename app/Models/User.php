@@ -41,6 +41,7 @@ class User extends Authenticatable implements HasMedia
         "id",
 //        "username",
         "surname",
+        "phone",
         'name',
         'email',
         'created_at',
@@ -123,6 +124,24 @@ class User extends Authenticatable implements HasMedia
     public function getFullnameAttribute()
     {
         return $this->name.' '.$this->surname;
+    }
+
+
+    public static function filterResponse($user){
+        if (!$user)
+            return false;
+
+        return [
+            'label' => $user->name.' '.$user->surname,
+            'value' => $user->id,
+            'fullname' => $user->name.' '.$user->surname,
+            'name' => $user->name,
+            'surname' => $user->surname,
+            'phone' => $user->phone,
+            'email' => $user->email,
+            'role' => self::getRoleList($user->role_id),
+            'address_list' => $user->address_list,
+        ];
     }
 
     public function registerMediaConversions(Media $media = null): void
